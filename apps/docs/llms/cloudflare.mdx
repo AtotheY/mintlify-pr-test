@@ -1,0 +1,82 @@
+```mdx
+---
+title: "Cloudflare AI Integration"
+description: "Integrating Cloudflare's AI models with SpinAI for enhanced language processing capabilities."
+---
+
+## Usage
+
+To use Cloudflare's AI models within your SpinAI projects, you need to create a Cloudflare AI LLM instance. This instance will allow you to send prompts to Cloudflare's AI and receive responses. The setup requires both your Cloudflare API token and Account ID. Here's how you can set it up:
+
+```typescript
+import { createCloudflareAILLM } from "spinai";
+
+const cloudflareAILLM = createCloudflareAILLM({
+  apiToken: process.env.CLOUDFLARE_API_TOKEN,
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  model: "@cf/meta/llama-2-7b-chat-int8", // Optional, defaults to "@cf/meta/llama-2-7b-chat-int8"
+});
+
+// Example usage
+const response = await cloudflareAILLM.complete({
+  prompt: "Explain the significance of AI in modern technology.",
+  maxTokens: 512, // Optional
+});
+```
+
+## Configuration
+
+Before you can start using Cloudflare AI with SpinAI, you need to configure it with the necessary credentials and optional parameters. Here's the configuration interface:
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string;
+  accountId: string;
+  model?: string; // Defaults to "@cf/meta/llama-2-7b-chat-int8"
+}
+```
+
+- `apiToken`: Your Cloudflare API token.
+- `accountId`: Your Cloudflare Account ID.
+- `model`: The Cloudflare AI model you wish to use. This is optional and defaults to "@cf/meta/llama-2-7b-chat-int8".
+
+## Error Handling
+
+When creating the Cloudflare AI LLM instance, make sure to handle errors appropriately. The function will throw errors if the `apiToken` or `accountId` is not provided:
+
+```typescript
+try {
+  const cloudflareAILLM = createCloudflareAILLM({
+    apiToken: process.env.CLOUDFLARE_API_TOKEN,
+    accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  });
+  // Use cloudflareAILLM for operations
+} catch (error) {
+  console.error("Failed to create Cloudflare AI LLM:", error);
+}
+```
+
+This ensures that your application can gracefully handle missing or incorrect configuration without crashing.
+
+## Advanced Usage
+
+The Cloudflare AI integration allows for advanced scenarios, such as specifying a JSON schema for the AI's response. This can be particularly useful for applications requiring structured output:
+
+```typescript
+const schema = {
+  type: "object",
+  properties: {
+    answer: { type: "string" },
+    details: { type: "string" },
+  },
+  required: ["answer"],
+};
+
+const response = await cloudflareAILLM.complete({
+  prompt: "Describe the impact of quantum computing on encryption.",
+  schema: schema,
+});
+```
+
+This will instruct Cloudflare's AI to respond with a JSON object that matches the specified schema, ensuring that the responses are in a predictable format.
+```
