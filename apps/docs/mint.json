@@ -61,7 +61,11 @@
     },
     {
       "group": "Agent LLMs",
-      "pages": ["llms/overview", "llms/openai", "llms/anthropic"]
+      "pages": [
+        "llms/overview",
+        "llms/openai",
+        "llms/anthropic"
+      ]
     },
     {
       "group": "Examples",
@@ -75,6 +79,12 @@
             "examples/zendesk-support/deployment"
           ]
         }
+      ]
+    },
+    {
+      "group": "Llms",
+      "pages": [
+        "apps/docs/llms/cloudflare"
       ]
     }
   ],
