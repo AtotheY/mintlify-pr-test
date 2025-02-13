@@ -1,0 +1,83 @@
+---
+title: "Integrating Cloudflare with SpinAI"
+description: "Learn how to configure and use Cloudflare's LLM with SpinAI for advanced AI capabilities."
+---
+
+## Introduction
+
+SpinAI now supports integration with Cloudflare's Large Language Models (LLMs), enabling developers to leverage Cloudflare's powerful AI capabilities within their applications. This documentation will guide you through the process of configuring and using Cloudflare LLM with SpinAI, including setting up your environment, making API requests, and understanding token cost calculations.
+
+## Configuration
+
+To use Cloudflare LLM with SpinAI, you need to configure it with your Cloudflare API token and account ID. Optionally, you can specify the model you wish to use; if not specified, a default model is used.
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string; // Your Cloudflare API token
+  accountId: string; // Your Cloudflare Account ID
+  model?: string; // Optional. Defaults to "@cf/meta/llama-2-7b-chat-int8"
+}
+```
+
+## Usage Examples
+
+### Basic Cloudflare LLM Setup
+
+This example demonstrates how to create a Cloudflare LLM instance and use it to complete a prompt.
+
+```typescript
+import { createCloudflareAILLM } from "spinai";
+
+const llm = createCloudflareAILLM({
+  apiToken: process.env.CLOUDFLARE_API_TOKEN,
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  // model is optional and defaults to "@cf/meta/llama-2-7b-chat-int8"
+});
+
+llm.complete({
+  prompt: "What is the weather like today?",
+  maxTokens: 1024,
+}).then(result => {
+  console.log(result.content);
+});
+```
+
+### Advanced Configuration Options
+
+You can customize the behavior of the Cloudflare LLM by specifying additional options such as `temperature` and `maxTokens`.
+
+```typescript
+llm.complete({
+  prompt: "Describe the process of photosynthesis.",
+  temperature: 0.5, // Optional. Controls the randomness of the output.
+  maxTokens: 2048, // Optional. Specifies the maximum number of tokens in the response.
+  schema: { // Optional. Ensures the response matches a specified JSON schema.
+    type: "object",
+    properties: {
+      description: { type: "string" },
+    },
+    required: ["description"],
+  },
+}).then(result => {
+  console.log(result.content);
+});
+```
+
+## Token Cost Calculations
+
+Cloudflare AI does not provide direct token counts for requests and responses. SpinAI estimates the token usage based on the character count of the input and output. This estimation is used to calculate the cost of each request. The cost calculation is an important aspect to consider for managing your usage and budget.
+
+```typescript
+const inputChars = prompt.length;
+const outputChars = JSON.stringify(content).length;
+const estimatedInputTokens = Math.ceil(inputChars / 4);
+const estimatedOutputTokens = Math.ceil(outputChars / 4);
+
+const costCents = calculateCost(estimatedInputTokens, estimatedOutputTokens, model);
+```
+
+The `calculateCost` function estimates the cost based on the number of input and output tokens and the specific model used. This function is part of the SpinAI utilities and helps in budgeting and monitoring the usage of Cloudflare's LLM services.
+
+For more information on managing costs and optimizing your use of Cloudflare LLM with SpinAI, refer to the [Token Cost Management](#) section in our documentation (link to be added).
+
+By following these guidelines, you can effectively integrate Cloudflare's LLM into your SpinAI projects, leveraging the power of AI to enhance your applications.
