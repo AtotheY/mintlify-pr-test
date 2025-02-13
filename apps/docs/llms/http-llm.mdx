@@ -1,0 +1,90 @@
+---
+title: "HTTP LLM Integration"
+description: "Integrating custom HTTP-based language models with SpinAI"
+---
+
+## Overview
+
+The HTTP LLM integration allows you to connect any custom HTTP-based language model to SpinAI. This functionality is particularly useful for businesses and developers who have developed their own language models or use third-party models that are not directly supported by SpinAI. By configuring the HTTP endpoint and optional settings, you can seamlessly integrate these models into your SpinAI workflows.
+
+## Installation
+
+Ensure you have the `spinai` package installed in your project. If not, you can install it using npm or yarn:
+
+```bash
+npm install spinai
+# or
+yarn add spinai
+```
+
+## Configuration
+
+To use an HTTP-based language model with SpinAI, you need to configure it with the following options:
+
+```typescript
+interface HttpLLMConfig {
+  endpoint: string;
+  apiKey?: string;
+  headers?: Record<string, string>;
+  transformRequest?: (body: unknown) => unknown;
+  transformResponse?: (response: unknown) => string;
+}
+```
+
+- `endpoint`: The URL of the HTTP endpoint where the language model is hosted.
+- `apiKey`: (Optional) An API key required for authenticating requests to the endpoint.
+- `headers`: (Optional) Additional headers to include in the HTTP request.
+- `transformRequest`: (Optional) A function to transform the request body before sending it. Useful for customizing the request format required by the endpoint.
+- `transformResponse`: (Optional) A function to transform the response body received from the endpoint. Useful for customizing the response format before processing it in SpinAI.
+
+## Usage
+
+To create an HTTP LLM instance and use it with SpinAI, follow the example below:
+
+```typescript
+import { createHttpLLM } from "spinai";
+
+const httpLLM = createHttpLLM({
+  endpoint: "https://your-custom-model-endpoint.com",
+  apiKey: "your-api-key", // Optional
+  headers: { "Custom-Header": "Value" }, // Optional
+  transformRequest: (body) => {
+    // Optionally transform the request body
+    return body;
+  },
+  transformResponse: (response) => {
+    // Optionally transform the response body
+    return response as string;
+  },
+});
+
+// Use httpLLM with SpinAI's createAgent or directly in your application
+```
+
+This setup allows you to integrate any HTTP-based language model into your SpinAI applications, enabling a wide range of custom NLP functionalities.
+
+## Advanced Configuration
+
+The `transformRequest` and `transformResponse` functions provide flexibility in handling request and response data. This is particularly useful when the external language model expects a specific request format or returns responses in a format that needs to be parsed differently.
+
+### Transform Request Example
+
+```typescript
+transformRequest: (body) => {
+  // Modify the body or wrap it in another object as required by your endpoint
+  return {
+    modelInput: body,
+  };
+},
+```
+
+### Transform Response Example
+
+```typescript
+transformResponse: (response) => {
+  // Extract or transform the response as needed
+  return response.resultText;
+},
+```
+
+By customizing these functions, you can ensure compatibility between SpinAI and virtually any HTTP-based language model, making it a powerful tool for extending the capabilities of your NLP applications.
