@@ -1,0 +1,76 @@
+---
+title: "Cloudflare LLM Integration"
+description: "Learn how to integrate Cloudflare's LLM into your SpinAI projects for enhanced AI capabilities."
+---
+
+## Introduction
+
+The Cloudflare LLM integration allows developers to leverage Cloudflare's powerful language models within their SpinAI projects. This document outlines how to set up and configure the Cloudflare LLM, provide usage examples, and estimate costs based on token usage.
+
+## Setup and Configuration
+
+Before you can use the Cloudflare LLM, you need to configure it with your Cloudflare API token and Account ID. Optionally, you can specify a model to use; if not provided, a default model is used.
+
+```typescript
+import { createCloudflareAILLM } from "spinai";
+
+const cloudflareLLM = createCloudflareAILLM({
+  apiToken: process.env.CLOUDFLARE_API_TOKEN, // Your Cloudflare API token
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID, // Your Cloudflare Account ID
+  model: "@cf/meta/llama-2-7b-chat-int8", // Optional, defaults to "@cf/meta/llama-2-7b-chat-int8"
+});
+```
+
+Ensure that you have the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` environment variables set with your Cloudflare credentials.
+
+## Usage Examples
+
+### Basic Cloudflare LLM setup
+
+The following example demonstrates a basic setup for using Cloudflare LLM to generate text based on a prompt.
+
+```typescript
+const result = await cloudflareLLM.complete({
+  prompt: "What is the weather like today?",
+  maxTokens: 512, // Optional, defaults to 1024
+  temperature: 0.5, // Optional, defaults to 0.7
+});
+
+console.log(result.content); // Outputs the generated text
+```
+
+### Integrating Cloudflare LLM with existing systems
+
+Cloudflare LLM can be integrated into your existing systems to enhance functionalities with AI. Here's an example of how you might use it to process user queries.
+
+```typescript
+async function handleUserQuery(query: string) {
+  const response = await cloudflareLLM.complete({
+    prompt: query,
+    maxTokens: 1024,
+  });
+
+  return response.content;
+}
+```
+
+## Cost Estimation
+
+Cloudflare AI doesn't provide token counts directly, so the SpinAI integration estimates costs based on character count. Here's how you can estimate the cost of a request:
+
+```typescript
+const result = await cloudflareLLM.complete({
+  prompt: "Detailed instructions on how to bake a cake",
+  maxTokens: 1024,
+});
+
+console.log(`Estimated cost in cents: ${result.costCents}`);
+```
+
+This estimation helps in managing and forecasting the expenses associated with using Cloudflare's LLM in your projects.
+
+For more detailed information on managing costs and optimizing usage, refer to the [Cloudflare documentation](https://developers.cloudflare.com/).
+
+## Conclusion
+
+Integrating Cloudflare LLM with SpinAI provides a powerful tool for enhancing your applications with advanced AI capabilities. By following the setup and configuration steps outlined in this document, you can start leveraging Cloudflare's LLM in your projects. Remember to monitor your usage and estimate costs to manage your budget effectively.
