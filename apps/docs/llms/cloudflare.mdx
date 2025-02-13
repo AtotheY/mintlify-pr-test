@@ -1,0 +1,80 @@
+```mdx
+---
+title: "Cloudflare AI Integration"
+description: "Integrating Cloudflare's Llama 2 model with SpinAI for natural language processing tasks."
+---
+
+## Usage
+
+Integrating Cloudflare's AI with SpinAI allows you to leverage the Llama 2 model for various natural language processing tasks. Here's how to set up and use the Cloudflare AI LLM with SpinAI:
+
+```typescript
+import { createCloudflareAILLM } from "spinai";
+
+const cloudflareAILLM = createCloudflareAILLM({
+  apiToken: process.env.CLOUDFLARE_API_TOKEN,
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  model: "@cf/meta/llama-2-7b-chat-int8", // Optional
+});
+
+const result = await cloudflareAILLM.complete({
+  prompt: "What is the weather like today?",
+  temperature: 0.7, // Optional
+  maxTokens: 1024, // Optional
+});
+
+console.log(result.content);
+```
+
+## Configuration
+
+To use Cloudflare's AI LLM, you need to configure it with your Cloudflare API token and account ID. Optionally, you can specify a model; if not provided, it defaults to Llama 2.
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string;
+  accountId: string;
+  model?: string; // Defaults to "@cf/meta/llama-2-7b-chat-int8"
+}
+```
+
+## Completing Prompts
+
+The `complete` method allows you to send prompts to the configured Cloudflare AI model and receive responses. You can optionally specify a schema for the response, the temperature (creativity level), and the maximum number of tokens (words) in the response.
+
+```typescript
+interface CompletionOptions {
+  prompt: string;
+  schema?: any; // Optional JSON schema for the response
+  temperature?: number; // Optional, defaults to 0.7
+  maxTokens?: number; // Optional, defaults to 1024
+}
+
+interface CompletionResult<T> {
+  content: T;
+  inputTokens: number; // Estimated number of input tokens
+  outputTokens: number; // Estimated number of output tokens
+  costCents: number; // Estimated cost in cents
+  rawInput: string; // Original input prompt
+  rawOutput: string; // Raw output from the model
+}
+```
+
+The `complete` method performs a POST request to Cloudflare's AI endpoint with the provided prompt and configuration options, then parses the response according to the optional schema if provided. It estimates the cost based on the number of tokens used in the prompt and response.
+
+## Example
+
+Here's an example of using the Cloudflare AI LLM to process a prompt and log the response:
+
+```typescript
+const response = await cloudflareAILLM.complete({
+  prompt: "Explain the theory of relativity.",
+  temperature: 0.5,
+  maxTokens: 1500,
+});
+
+console.log(response.content);
+```
+
+This sends a prompt to the Cloudflare AI model and logs the model's response. The `temperature` and `maxTokens` parameters control the creativity and length of the response, respectively.
+```
