@@ -1,0 +1,121 @@
+---
+title: "HTTP Language Learning Model (LLM) API"
+description: "Documentation for the HTTP-based Language Learning Model (LLM) interface, enabling custom model integration over HTTP."
+---
+
+import Code from '@mintlify/components/Code'
+
+# HTTP Language Learning Model (LLM) API
+
+The HTTP Language Learning Model (LLM) API provides a flexible interface for integrating custom language models over HTTP. This API allows users to send prompts to a specified endpoint and receive generated text in response, supporting custom headers, API keys, and request/response transformations.
+
+## Installation
+
+Ensure you have the necessary environment to run HTTP requests within your project. This documentation assumes familiarity with JavaScript `fetch` API or similar HTTP request methods.
+
+## Configuration
+
+Before using the HTTP LLM, you must configure it with your endpoint and optional parameters such as API keys and custom headers.
+
+### `HttpLLMConfig` Interface
+
+The configuration object for initializing an HTTP LLM.
+
+```typescript
+interface HttpLLMConfig {
+  endpoint: string;
+  apiKey?: string;
+  headers?: Record<string, string>;
+  transformRequest?: (body: unknown) => unknown;
+  transformResponse?: (response: unknown) => string;
+}
+```
+
+- `endpoint`: The URL of the HTTP endpoint to which requests will be sent.
+- `apiKey`: Optional API key for authentication.
+- `headers`: Optional custom headers to include in the request.
+- `transformRequest`: Optional function to transform the request body before sending.
+- `transformResponse`: Optional function to transform the response body upon receiving.
+
+## Usage
+
+### Creating an HTTP LLM Instance
+
+First, create an instance of the HTTP LLM by providing a configuration object.
+
+```typescript
+import { createHttpLLM } from 'path/to/http';
+
+const httpLLM = createHttpLLM({
+  endpoint: 'https://your.custom.model/endpoint',
+  apiKey: 'your_api_key',
+  headers: {
+    'Custom-Header': 'Value',
+  },
+  transformRequest: (body) => {
+    // Modify the request body as needed
+    return body;
+  },
+  transformResponse: (response) => {
+    // Extract and/or modify the response as needed
+    return response;
+  },
+});
+```
+
+### Making a Completion Request
+
+To generate text based on a prompt, call the `complete` method on your HTTP LLM instance.
+
+```typescript
+const completionOptions = {
+  prompt: "Your prompt here",
+  schema: null, // or specify a JSON schema for structured responses
+  temperature: 0.5,
+  maxTokens: 256,
+};
+
+httpLLM.complete(completionOptions)
+  .then((result) => {
+    console.log(result.content); // The generated text
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+### Response Structure
+
+The response from a completion request includes the generated content, token estimates, and cost information.
+
+```typescript
+{
+  content: string | object; // Generated text or structured data
+  inputTokens: number; // Estimated number of tokens for the input
+  outputTokens: number; // Estimated number of tokens for the output
+  costCents: number; // Estimated cost in cents
+  rawInput: string; // Original input prompt
+  rawOutput: string; // Raw output text or JSON string
+}
+```
+
+## Example
+
+<Code language="typescript" code={`const httpLLM = createHttpLLM({
+  endpoint: 'https://your.custom.model/endpoint',
+  apiKey: 'your_api_key',
+});
+
+httpLLM.complete({
+  prompt: "Explain the significance of HTTP status codes.",
+  temperature: 0.7,
+  maxTokens: 512,
+})
+.then((result) => {
+  console.log(result.content);
+})
+.catch((error) => {
+  console.error(error);
+});`} />
+
+This example demonstrates how to set up and use the HTTP LLM API to generate text based on a prompt, showcasing the flexibility and power of integrating custom language models over HTTP.
