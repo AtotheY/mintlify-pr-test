@@ -1,0 +1,102 @@
+---
+title: "Cloudflare AI LLM Integration"
+description: "Integrating Cloudflare's AI models with SpinAI for enhanced language processing capabilities."
+---
+
+## Overview
+
+This documentation covers the integration of Cloudflare's AI models into the SpinAI framework, enabling developers to leverage Cloudflare's language learning models (LLMs) for various applications. The integration is facilitated through the `createCloudflareAILLM` function, which configures and initializes the connection to Cloudflare's AI services.
+
+## Installation
+
+To use Cloudflare AI models with SpinAI, ensure you have the `spinai` package installed in your project. If not, you can install it using npm or yarn:
+
+```bash
+npm install spinai
+# or
+yarn add spinai
+```
+
+## Configuration
+
+Before you can start using Cloudflare AI models, you need to configure your environment with the necessary credentials. The `CloudflareConfig` interface outlines the required and optional configuration options:
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string;
+  accountId: string;
+  model?: string; // Optional, defaults to "@cf/meta/llama-2-7b-chat-int8"
+}
+```
+
+- `apiToken`: Your Cloudflare API token.
+- `accountId`: Your Cloudflare account ID.
+- `model`: The Cloudflare AI model you wish to use. If not specified, it defaults to the "@cf/meta/llama-2-7b-chat-int8" model.
+
+## Usage
+
+To create a Cloudflare AI LLM instance, use the `createCloudflareAILLM` function with your configuration. Here's an example on how to set it up and use it for generating text:
+
+```typescript
+import { createCloudflareAILLM } from "spinai";
+
+const cloudflareAILLM = createCloudflareAILLM({
+  apiToken: process.env.CLOUDFLARE_API_TOKEN,
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  model: "@cf/meta/llama-2-7b-chat-int8", // Optional
+});
+
+const prompt = "Explain the concept of relativity";
+cloudflareAILLM.complete({
+  prompt: prompt,
+  maxTokens: 512,
+}).then(result => {
+  console.log(result.content);
+}).catch(error => {
+  console.error("Error:", error);
+});
+```
+
+This example demonstrates how to initialize the Cloudflare AI LLM and use it to generate a response to a given prompt. The `complete` method returns a promise that resolves with the completion result.
+
+## Completion Options
+
+The `complete` method accepts the following options:
+
+```typescript
+interface CompletionOptions {
+  prompt: string;
+  schema?: any; // Optional JSON schema for structured responses
+  temperature?: number; // Optional, defaults to 0.7
+  maxTokens?: number; // Optional, defaults to 1024
+}
+```
+
+- `prompt`: The input text to generate responses for.
+- `schema`: An optional JSON schema to structure the response.
+- `temperature`: Controls the randomness of the output. Lower values produce more deterministic outputs.
+- `maxTokens`: The maximum number of tokens to generate.
+
+## Response Handling
+
+The response from the `complete` method includes the generated content, token information, and the estimated cost:
+
+```typescript
+interface CompletionResult<T> {
+  content: T;
+  inputTokens: number;
+  outputTokens: number;
+  costCents: number;
+  rawInput: string;
+  rawOutput: string;
+}
+```
+
+- `content`: The generated content based on the prompt.
+- `inputTokens` and `outputTokens`: The number of tokens for the input and output, respectively.
+- `costCents`: The estimated cost of the operation in cents.
+- `rawInput` and `rawOutput`: The raw input prompt and output text.
+
+## Conclusion
+
+Integrating Cloudflare's AI models with SpinAI provides a powerful tool for processing and generating natural language content. By following the steps outlined in this documentation, developers can easily incorporate Cloudflare's LLMs into their applications for a wide range of language-based tasks.
