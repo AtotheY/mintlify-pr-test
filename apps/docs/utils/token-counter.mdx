@@ -1,0 +1,54 @@
+---
+title: Token Counter Utility
+description: Guide on using the tokenCounter utility for estimating token usage and costs in large language models (LLMs).
+---
+
+## Overview
+
+The `tokenCounter` utility is designed to help developers estimate the number of tokens used by inputs and outputs in various large language models (LLMs). This tool is crucial for managing and optimizing the costs associated with using LLMs, as different models have different token costs for processing inputs and generating outputs.
+
+## Integration with LLMs
+
+The utility supports a wide range of models, including OpenAI's GPT models, Anthropic's Claude models, and now, Cloudflare AI models. The recent update has expanded the utility's capabilities to include cost estimation for Cloudflare's LLaMA and other specific models, providing developers with more options for their AI-driven applications.
+
+## Cost Estimation
+
+The `tokenCounter` calculates costs based on the number of tokens consumed by an operation. Each model has predefined input and output token costs, which are used to estimate the total cost of processing data with that model. This feature is particularly useful for budgeting and cost optimization in projects that rely on LLMs.
+
+### Model Costs
+
+The cost of tokens varies between models. For instance, Cloudflare's LLaMA models have lower token costs compared to other models, making them a cost-effective option for certain applications. The utility defines these costs as constants, allowing for easy updates and additions of new models.
+
+## Examples
+
+### Using tokenCounter with Cloudflare LLM
+
+To estimate the token usage for a Cloudflare LLaMA model, you can use the `tokenCounter` utility as follows:
+
+```typescript
+import { tokenCounter } from 'path/to/tokenCounter';
+
+const modelId = "@cf/meta/llama-2-7b-chat-int8";
+const inputText = "Your input text here";
+const outputText = "The generated output text";
+
+const inputCost = tokenCounter.calculateInputCost(modelId, inputText);
+const outputCost = tokenCounter.calculateOutputCost(modelId, outputText);
+
+console.log(`Input Cost: ${inputCost}, Output Cost: ${outputCost}`);
+```
+
+This code snippet demonstrates how to calculate the token costs for both input and output texts using the Cloudflare LLaMA 2-7b model.
+
+### Estimating costs with tokenCounter
+
+To get a comprehensive cost estimation for processing data with a specific model, you can combine both input and output token calculations:
+
+```typescript
+const totalCost = inputCost + outputCost;
+console.log(`Total Cost: ${totalCost}`);
+```
+
+This approach provides a straightforward way to estimate the total token cost for an operation, aiding in budget management and cost optimization efforts.
+
+The `tokenCounter` utility is an essential tool for developers working with LLMs, offering a simple yet effective way to manage and optimize the costs associated with AI-driven applications.
