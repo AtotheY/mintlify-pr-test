@@ -1,0 +1,74 @@
+---
+title: "Cloudflare AI Integration"
+description: "Integrating Cloudflare AI LLM with SpinAI for advanced natural language processing."
+---
+
+## Usage
+
+To use Cloudflare AI's Large Language Models (LLMs) with SpinAI, you must first create an instance of the Cloudflare AI LLM. This involves configuring the API token and account ID, and optionally specifying a model. The default model used is `@cf/meta/llama-2-7b-chat-int8`, which is suitable for a wide range of chat-based applications.
+
+```typescript
+import { createCloudflareAILLM } from "spinai";
+
+const llm = createCloudflareAILLM({
+  apiToken: process.env.CLOUDFLARE_API_TOKEN,
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  model: "@cf/meta/llama-2-7b-chat-int8", // Optional
+});
+
+// Example usage with SpinAI's createAgent function
+const agent = createAgent({
+  instructions: "Provide detailed, accurate responses to user queries",
+  actions: [analyzeQuery, generateResponse],
+  llm,
+});
+```
+
+## Configuration
+
+When creating a Cloudflare AI LLM instance, you need to provide configuration details. Below is the interface for the configuration object:
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string;
+  accountId: string;
+  model?: string; // Defaults to "@cf/meta/llama-2-7b-chat-int8"
+}
+```
+
+- `apiToken`: Your Cloudflare API token.
+- `accountId`: Your Cloudflare account ID.
+- `model`: The model identifier. This is optional, and if not provided, the default model `@cf/meta/llama-2-7b-chat-int8` is used.
+
+## Completing Prompts
+
+The `complete` method allows you to send prompts to the Cloudflare AI and receive generated text based on the model's training. Here's how you can use it:
+
+```typescript
+const completionOptions = {
+  prompt: "Explain the significance of machine learning in modern technology.",
+  temperature: 0.5,
+  maxTokens: 512,
+};
+
+llm.complete(completionOptions).then((result) => {
+  console.log(result.content); // The generated text
+});
+```
+
+The `complete` method supports the following options:
+
+- `prompt`: The input text prompt for the AI.
+- `schema`: An optional JSON schema to structure the AI's response.
+- `temperature`: Controls the randomness of the output (lower values make the output more deterministic).
+- `maxTokens`: The maximum number of tokens in the output (including the prompt).
+
+## Handling Responses
+
+The response from `complete` includes the generated content, token counts for input and output, the estimated cost in cents, and the raw input and output texts. This information can be used for analytics, billing, or further processing within your application.
+
+## Error Handling
+
+If the Cloudflare AI request fails, an error will be thrown with details about the failure. Ensure that your application is equipped to catch and handle these errors appropriately.
+
+By integrating Cloudflare AI LLM with SpinAI, developers can leverage powerful natural language processing capabilities to enhance their applications, from automating customer support to generating content dynamically.
