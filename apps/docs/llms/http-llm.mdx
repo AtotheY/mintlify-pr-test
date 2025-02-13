@@ -1,0 +1,82 @@
+---
+title: "HTTP LLM Integration"
+description: "Integrating custom HTTP-based language models with SpinAI"
+---
+
+## Overview
+
+The HTTP LLM integration allows you to connect any custom HTTP-based language model to the SpinAI ecosystem. This feature is designed for developers who have their own language models hosted on HTTP endpoints and wish to utilize them within SpinAI for various tasks. By configuring the HTTP LLM, you can seamlessly integrate your custom models, providing a flexible way to extend the capabilities of SpinAI with your own AI solutions.
+
+## Installation
+
+To use the HTTP LLM integration, ensure you have the latest version of SpinAI installed in your project. If you haven't installed SpinAI yet, you can add it to your project by running:
+
+```bash
+npm install spinai
+```
+
+or if you prefer using yarn:
+
+```bash
+yarn add spinai
+```
+
+## Configuration
+
+Before you can use your HTTP-based language model with SpinAI, you need to configure it by specifying the endpoint and other optional parameters. Here is the configuration interface:
+
+```typescript
+interface HttpLLMConfig {
+  endpoint: string;
+  apiKey?: string;
+  headers?: Record<string, string>;
+  transformRequest?: (body: unknown) => unknown;
+  transformResponse?: (response: unknown) => string;
+}
+```
+
+- `endpoint`: The URL of your HTTP-based language model endpoint.
+- `apiKey`: Optional. Your API key if your endpoint requires authentication.
+- `headers`: Optional. Additional headers to include in the HTTP request.
+- `transformRequest`: Optional. A function to transform the request body before sending it to your endpoint. This is useful for customizing the request format required by your model.
+- `transformResponse`: Optional. A function to transform the response from your endpoint before processing it. This allows you to adapt the response format to be compatible with SpinAI.
+
+## Usage
+
+To create an instance of the HTTP LLM and integrate it with SpinAI, follow these steps:
+
+```typescript
+import { createHttpLLM } from "spinai";
+
+const httpLLM = createHttpLLM({
+  endpoint: "https://your-model-endpoint.com",
+  apiKey: "your_api_key", // Optional
+  headers: { "Custom-Header": "value" }, // Optional
+  transformRequest: (body) => {
+    // Optional transformation logic
+    return body;
+  },
+  transformResponse: (response) => {
+    // Optional transformation logic
+    return response;
+  },
+});
+```
+
+After configuring the HTTP LLM, you can use it with SpinAI's `createAgent` function to perform tasks using your custom language model.
+
+```typescript
+import { createAgent } from "spinai";
+
+const agent = createAgent({
+  instructions: "Provide instructions for your custom model",
+  actions: [/* Define actions based on model's capabilities */],
+  llm: httpLLM,
+});
+```
+
+This setup allows you to leverage your custom HTTP-based language models within the SpinAI framework, enabling a wide range of AI-driven capabilities tailored to your specific needs.
+
+## Conclusion
+
+The HTTP LLM integration provides a powerful way to extend SpinAI with custom language models. By following the configuration and usage guidelines, you can integrate any HTTP-based model, unlocking new possibilities for AI-driven applications.
