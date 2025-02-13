@@ -1,0 +1,128 @@
+```mdx
+---
+title: "Cloudflare AI LLM Integration"
+description: "Integrate Cloudflare's AI with your application using the SpinAI package for seamless language model interactions."
+---
+
+import Code from '@site/src/components/Code';
+
+# Cloudflare AI LLM Integration
+
+This documentation covers the integration of Cloudflare's AI services, specifically their Large Language Models (LLMs), into your application using the SpinAI package. The `createCloudflareAILLM` function allows you to easily configure and utilize Cloudflare's AI for generating text completions based on prompts you provide.
+
+## Installation
+
+Before you can use the Cloudflare AI LLM integration, ensure that the SpinAI package is installed in your project. If not already installed, you can add it by running:
+
+```bash
+npm install @your-org/spinai
+```
+
+Or if you prefer using Yarn:
+
+```bash
+yarn add @your-org/spinai
+```
+
+## Configuration
+
+To use the Cloudflare AI LLM, you need to configure it with your Cloudflare API token and Account ID. Optionally, you can specify a model; if not provided, a default model is used.
+
+### CloudflareConfig
+
+The `CloudflareConfig` interface is used to provide configuration to the `createCloudflareAILLM` function.
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string;
+  accountId: string;
+  model?: string;
+}
+```
+
+- `apiToken`: Your Cloudflare API token.
+- `accountId`: Your Cloudflare Account ID.
+- `model`: (Optional) The specific Cloudflare AI model you wish to use. Defaults to `@cf/meta/llama-2-7b-chat-int8`.
+
+## Usage
+
+Once configured, you can create an instance of the Cloudflare LLM and use it to generate text completions.
+
+### Creating an LLM Instance
+
+```typescript
+import { createCloudflareAILLM, CloudflareConfig } from '@your-org/spinai';
+
+const config: CloudflareConfig = {
+  apiToken: 'your_cloudflare_api_token',
+  accountId: 'your_cloudflare_account_id',
+};
+
+const cloudflareAILLM = createCloudflareAILLM(config);
+```
+
+### Generating Text Completions
+
+To generate text completions, call the `complete` method on your Cloudflare LLM instance with a prompt and any additional options.
+
+```typescript
+const prompt = "What is the future of AI?";
+
+cloudflareAILLM.complete({
+  prompt: prompt,
+  maxTokens: 512,
+}).then(completionResult => {
+  console.log(completionResult.content);
+}).catch(error => {
+  console.error("Error generating text completion:", error);
+});
+```
+
+### CompletionOptions
+
+The `complete` method accepts the following options:
+
+- `prompt`: The input text prompt for the AI.
+- `schema`: (Optional) A JSON schema to structure the AI's response.
+- `temperature`: (Optional) Controls the randomness of the output. Higher values result in more varied responses.
+- `maxTokens`: (Optional) The maximum number of tokens (words) the AI should generate. Defaults to 1024.
+
+### CompletionResult
+
+The `complete` method returns a `Promise` that resolves to a `CompletionResult`, containing the following:
+
+- `content`: The generated text completion.
+- `inputTokens`: The estimated number of tokens used in the input prompt.
+- `outputTokens`: The estimated number of tokens in the output text.
+- `costCents`: The estimated cost of the operation in cents.
+- `rawInput`: The original input prompt.
+- `rawOutput`: The raw output text from the AI.
+
+## Example
+
+<Code language="typescript" title="Generating a Text Completion">
+{`import { createCloudflareAILLM, CloudflareConfig } from '@your-org/spinai';
+
+const config: CloudflareConfig = {
+  apiToken: 'your_cloudflare_api_token',
+  accountId: 'your_cloudflare_account_id',
+  // Optional model specification
+  model: '@cf/meta/llama-2-7b-chat-int8',
+};
+
+const cloudflareAILLM = createCloudflareAILLM(config);
+
+const prompt = "Describe the process of photosynthesis.";
+
+cloudflareAILLM.complete({
+  prompt: prompt,
+  maxTokens: 512,
+}).then(completionResult => {
+  console.log("Generated text:", completionResult.content);
+}).catch(error => {
+  console.error("Error:", error);
+});`}
+</Code>
+
+This documentation provides a comprehensive guide to integrating Cloudflare's AI LLM into your applications using the SpinAI package. By following the outlined steps, you can enhance your applications with powerful AI-generated text completions.
+```
