@@ -3,12 +3,14 @@ title: "LLM Support"
 description: "Language models supported by SpinAI"
 ---
 
-SpinAI supports multiple LLMs for agent decision making:
+SpinAI now supports a broader range of LLMs for agent decision making, including new integrations with Cloudflare and custom HTTP endpoints:
 
 - [OpenAI](/llms/openai)
 - [Anthropic](/llms/anthropic)
+- [Cloudflare](/llms/cloudflare)
+- [Custom HTTP LLM](/llms/http-llm)
 
-Each LLM can be configured with custom settings like:
+Each LLM can be configured with custom settings such as:
 
 - Model selection
 - Temperature
@@ -17,12 +19,18 @@ Each LLM can be configured with custom settings like:
 
 ## Choosing an LLM
 
-Consider these factors when choosing an LLM:
+When selecting an LLM for your application, consider the following factors:
 
 - Cost per token
 - Response quality
 - API reliability
 - Token context limits
+
+These considerations will help you determine the best LLM to meet your specific needs, balancing cost with performance and reliability.
+
+## Cloudflare and Custom HTTP LLMs
+
+The addition of Cloudflare and custom HTTP LLMs offers more flexibility in integrating language models into your applications. Cloudflare provides access to efficient and scalable AI models, while custom HTTP LLMs allow for the integration of any language model that can be accessed over HTTP, providing endless possibilities for customization and optimization.
 
 ## Next Steps
 
@@ -33,4 +41,12 @@ Consider these factors when choosing an LLM:
   <Card title="Anthropic Setup" icon="brain" href="/llms/anthropic">
     Use Claude models
   </Card>
+  <Card title="Cloudflare Setup" icon="cloud" href="/llms/cloudflare">
+    Use Cloudflare models
+  </Card>
+  <Card title="Custom HTTP LLM Setup" icon="custom" href="/llms/http-llm">
+    Use custom HTTP LLMs
+  </Card>
 </CardGroup>
+
+Explore the documentation for each LLM to learn about setup instructions, configuration options, and best practices for integration. Whether you're looking for the cutting-edge capabilities of OpenAI and Anthropic, the scalability of Cloudflare, or the flexibility of custom HTTP endpoints, SpinAI provides the tools you need to integrate advanced language models into your applications.
