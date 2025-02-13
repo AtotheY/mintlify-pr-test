@@ -1,0 +1,74 @@
+---
+title: Token Counter Utility for AI Models
+description: Documentation for the TokenCounter utility, including newly supported Cloudflare AI models.
+---
+
+import CodeBlock from '@theme/CodeBlock';
+
+# Token Counter Utility for AI Models
+
+The `TokenCounter` utility is designed to help developers estimate the token usage of various AI models, including the latest additions from Cloudflare AI. This utility is crucial for managing and optimizing the cost associated with using AI models in applications.
+
+## Installation
+
+Before you can use the `TokenCounter` utility, ensure that your project is set up correctly. This utility is part of the `spinai` package, so you must first install this package if you haven't already.
+
+```bash
+npm install @your-org/spinai
+```
+
+or
+
+```bash
+yarn add @your-org/spinai
+```
+
+## Supported Models
+
+The `TokenCounter` now includes support for several Cloudflare AI models, alongside existing models. Below is the updated list of supported models and their respective input and output token costs:
+
+- **Claude Models**
+  - `claude-2.1`: 8 tokens for input, 24 tokens for output
+  - `claude-2.0`: 8 tokens for input, 24 tokens for output
+  - `claude-instant-1.2`: 0.8 tokens for input, 2.4 tokens for output
+
+- **Cloudflare AI Models**
+  - `@cf/meta/llama-2-7b-chat-int8`: 0.2 tokens for input, 0.4 tokens for output
+  - `@cf/meta/llama-2-13b-chat-int8`: 0.4 tokens for input, 0.8 tokens for output
+  - `@cf/meta/llama-2-70b-chat-int8`: 1.0 tokens for input, 2.0 tokens for output
+  - `@cf/mistral/mistral-7b-instruct-v0.1`: 0.2 tokens for input, 0.4 tokens for output
+  - `@cf/tiiuae/falcon-7b-instruct`: 0.2 tokens for input, 0.4 tokens for output
+  - `@cf/anthropic/claude-instant-1.2`: 0.8 tokens for input, 2.4 tokens for output
+  - `@cf/anthropic/claude-2.1`: 8.0 tokens for input, 24.0 tokens for output
+  - `custom-http-model`: 0.5 tokens for input, 1.5 tokens for output
+
+## Usage
+
+To use the `TokenCounter` utility, you need to import it into your project and then call it with the model ID and the number of tokens you plan to use as input. Here's a basic example:
+
+```typescript
+import { getTokenCost } from '@your-org/spinai/src/utils/tokenCounter';
+
+const modelId = '@cf/meta/llama-2-7b-chat-int8';
+const inputTokens = 100; // Number of tokens you plan to input
+
+const cost = getTokenCost(modelId, inputTokens);
+console.log(`The cost for using ${modelId} with ${inputTokens} input tokens is:`, cost);
+```
+
+This utility will return the total cost in terms of input and output tokens based on the model's rates.
+
+## API Reference
+
+### `getTokenCost(modelId: ModelId, inputTokens: number): { inputCost: number; outputCost: number }`
+
+Calculates the cost of using a specific AI model based on the number of input tokens.
+
+- **Parameters**
+  - `modelId`: The ID of the model you're using. Must be one of the supported models.
+  - `inputTokens`: The number of tokens you plan to input into the model.
+- **Returns**: An object containing `inputCost` and `outputCost`, representing the total token cost for using the model.
+
+## Conclusion
+
+The `TokenCounter` utility is an essential tool for developers working with AI models, especially with the addition of Cloudflare AI models. By accurately estimating token usage, developers can better manage and optimize the costs associated with their AI operations.
