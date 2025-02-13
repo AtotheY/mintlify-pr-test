@@ -1,0 +1,100 @@
+---
+title: "HTTP-based Language Learning Models (LLM) Integration"
+description: "Integrate custom HTTP-based language learning models with your application using the SpinAI package."
+---
+
+import Code from '@mintlify/components/Code';
+
+## Overview
+
+The HTTP-based Language Learning Models (LLM) integration provides a flexible way to connect any custom HTTP-based LLM to your application. This functionality is part of the SpinAI package and allows for easy configuration and use of external language models via HTTP requests. This document outlines how to set up and use this integration within your project.
+
+## Installation
+
+Before you can use the HTTP-based LLM integration, ensure you have the SpinAI package installed in your project. If not, you can install it using npm or yarn:
+
+```bash
+npm install @your-spinai-package-name
+# or
+yarn add @your-spinai-package-name
+```
+
+## Configuration
+
+To use the HTTP-based LLM integration, you need to configure it with the endpoint of your custom LLM and other optional settings. Here is an overview of the configuration options:
+
+- `endpoint`: The URL of the HTTP endpoint for your LLM. This is required.
+- `apiKey`: An optional API key for authentication with your LLM endpoint.
+- `headers`: Optional additional headers to include in the request to your LLM.
+- `transformRequest`: An optional function to transform the request body before sending it to the LLM.
+- `transformResponse`: An optional function to transform the response from the LLM before processing it.
+
+## Usage
+
+After configuring the HTTP-based LLM, you can use it to complete prompts. Here's how to set up and use the integration:
+
+### 1. Import and Configure
+
+First, import the `createHttpLLM` function and define your configuration.
+
+<Code lang="typescript">
+{`import { createHttpLLM } from '@your-spinai-package-name/spinai/llms/http';
+
+const httpLLMConfig = {
+  endpoint: 'https://your-llm-endpoint.com',
+  apiKey: 'your-api-key', // Optional
+  // Additional configuration options...
+};
+
+const httpLLM = createHttpLLM(httpLLMConfig);`}
+</Code>
+
+### 2. Use the LLM
+
+With the LLM configured, you can now use it to generate responses to prompts.
+
+<Code lang="typescript">
+{`async function generateResponse(prompt) {
+  try {
+    const completionOptions = {
+      prompt: prompt,
+      maxTokens: 1024,
+      // Additional options...
+    };
+    const result = await httpLLM.complete(completionOptions);
+    console.log(result.content); // Process the result as needed
+  } catch (error) {
+    console.error('LLM request failed:', error);
+  }
+}
+
+generateResponse('Your prompt here');`}
+</Code>
+
+## API Reference
+
+### `createHttpLLM(config: HttpLLMConfig): LLM`
+
+Creates a new HTTP-based LLM instance with the specified configuration.
+
+#### Parameters
+
+- `config: HttpLLMConfig` - The configuration object for the LLM.
+
+#### Returns
+
+- `LLM` - An instance of the LLM configured to communicate with your specified HTTP endpoint.
+
+### Types
+
+#### `HttpLLMConfig`
+
+- `endpoint: string` - The URL of the LLM endpoint.
+- `apiKey?: string` - Optional API key for authentication.
+- `headers?: Record<string, string>` - Optional additional HTTP headers.
+- `transformRequest?: (body: unknown) => unknown` - Optional function to transform the request body.
+- `transformResponse?: (response: unknown) => string` - Optional function to transform the response.
+
+## Conclusion
+
+The HTTP-based LLM integration in the SpinAI package provides a powerful and flexible way to integrate custom language learning models into your application. By following the steps outlined in this document, you can easily set up and start using your custom LLM with HTTP endpoints.
