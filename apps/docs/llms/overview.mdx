@@ -1,12 +1,15 @@
+```mdx
 ---
 title: "LLM Support"
 description: "Language models supported by SpinAI"
 ---
 
-SpinAI supports multiple LLMs for agent decision making:
+SpinAI now supports multiple LLMs for agent decision making, including the newly added Cloudflare and custom HTTP-based models:
 
 - [OpenAI](/llms/openai)
 - [Anthropic](/llms/anthropic)
+- [Cloudflare](/llms/cloudflare)
+- [Custom HTTP](/llms/custom-http)
 
 Each LLM can be configured with custom settings like:
 
@@ -23,6 +26,54 @@ Consider these factors when choosing an LLM:
 - Response quality
 - API reliability
 - Token context limits
+- Customization capabilities
+
+## Cloudflare AI Integration
+
+Cloudflare AI integration allows you to leverage Cloudflare's Llama 2 model directly within SpinAI. To use Cloudflare AI, you need to provide:
+
+- Cloudflare API token
+- Account ID
+- Optional: Model name (defaults to `@cf/meta/llama-2-7b-chat-int8`)
+
+Example configuration:
+
+```javascript
+const cloudflareConfig = {
+  apiToken: 'your_cloudflare_api_token',
+  accountId: 'your_cloudflare_account_id',
+  model: '@cf/meta/llama-2-7b-chat-int8', // Optional
+};
+```
+
+## Custom HTTP LLM Integration
+
+For even more flexibility, SpinAI supports custom HTTP-based LLMs. This allows you to integrate any AI model that can be accessed via an HTTP endpoint. Configuration options include:
+
+- HTTP endpoint URL
+- Optional: API key
+- Optional: Custom headers
+- Optional: Request/response transformation functions
+
+Example configuration:
+
+```javascript
+const httpLLMConfig = {
+  endpoint: 'your_custom_http_endpoint',
+  apiKey: 'your_api_key', // Optional
+  headers: {
+    'Custom-Header': 'Value', // Optional
+  },
+  transformRequest: (body) => {
+    // Transform the request body if needed
+    return body;
+  },
+  transformResponse: (response) => {
+    // Transform the response if needed
+    return response;
+  },
+};
+```
 
 ## Next Steps
 
@@ -33,4 +84,11 @@ Consider these factors when choosing an LLM:
   <Card title="Anthropic Setup" icon="brain" href="/llms/anthropic">
     Use Claude models
   </Card>
+  <Card title="Cloudflare Setup" icon="cloud" href="/llms/cloudflare">
+    Use Cloudflare AI models
+  </Card>
+  <Card title="Custom HTTP Setup" icon="code" href="/llms/custom-http">
+    Use custom HTTP-based models
+  </Card>
 </CardGroup>
+```
