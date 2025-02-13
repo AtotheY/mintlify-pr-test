@@ -1,3 +1,4 @@
+```mdx
 ---
 title: "OpenAI"
 description: "Using OpenAI models with SpinAI"
@@ -29,4 +30,69 @@ interface OpenAIConfig {
   model?: string; // Defaults to gpt-4-turbo-preview
   temperature?: number; // Defaults to 0.7
 }
+```
+
+## Cloudflare AI Integration
+
+SpinAI now supports Cloudflare's AI models. You can integrate Cloudflare AI by using the `createCloudflareAILLM` function.
+
+```typescript
+import { createAgent, createCloudflareAILLM } from "spinai";
+
+const cloudflareLLM = createCloudflareAILLM({
+  apiToken: process.env.CLOUDFLARE_API_TOKEN,
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  model: "@cf/meta/llama-2-7b-chat-int8", // Optional
+});
+
+const agent = createAgent({
+  instructions: "Generate marketing content",
+  actions: [analyzeMarket, generateContent],
+  llm: cloudflareLLM,
+});
+```
+
+### Cloudflare Configuration
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string;
+  accountId: string;
+  model?: string; // Defaults to "@cf/meta/llama-2-7b-chat-int8"
+}
+```
+
+## HTTP LLM Integration
+
+SpinAI introduces the ability to integrate with any HTTP-based LLM endpoint. Utilize the `createHttpLLM` function to connect with your custom LLM service.
+
+```typescript
+import { createAgent, createHttpLLM } from "spinai";
+
+const httpLLM = createHttpLLM({
+  endpoint: "https://your.custom.llm/api",
+  apiKey: process.env.CUSTOM_LLM_API_KEY, // Optional
+  headers: { "Custom-Header": "Value" }, // Optional
+  transformRequest: (body) => {/* Transform body if needed */},
+  transformResponse: (response) => {/* Transform response if needed */},
+});
+
+const agent = createAgent({
+  instructions: "Create personalized user experiences",
+  actions: [getUserPreferences, customizeExperience],
+  llm: httpLLM,
+});
+```
+
+### HTTP LLM Configuration
+
+```typescript
+interface HttpLLMConfig {
+  endpoint: string;
+  apiKey?: string;
+  headers?: Record<string, string>;
+  transformRequest?: (body: unknown) => unknown;
+  transformResponse?: (response: unknown) => string;
+}
+```
 ```
