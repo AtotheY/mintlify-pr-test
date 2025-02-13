@@ -1,3 +1,4 @@
+```mdx
 ---
 title: "LLM Support"
 description: "Language models supported by SpinAI"
@@ -7,6 +8,8 @@ SpinAI supports multiple LLMs for agent decision making:
 
 - [OpenAI](/llms/openai)
 - [Anthropic](/llms/anthropic)
+- Cloudflare
+- Custom HTTP Model
 
 Each LLM can be configured with custom settings like:
 
@@ -24,6 +27,44 @@ Consider these factors when choosing an LLM:
 - API reliability
 - Token context limits
 
+## Cloudflare LLM
+
+The Cloudflare LLM integration allows you to utilize Cloudflare's AI models. You must provide your Cloudflare API token and Account ID. Optionally, you can specify a model; otherwise, the default model is used.
+
+### Configuration
+
+```typescript
+import { createCloudflareAILLM } from 'spinai/llms/cloudflare';
+
+const cloudflareConfig = {
+  apiToken: 'your_cloudflare_api_token',
+  accountId: 'your_cloudflare_account_id',
+  model: '@cf/meta/llama-2-7b-chat-int8', // Optional
+};
+
+const cloudflareLLM = createCloudflareAILLM(cloudflareConfig);
+```
+
+## Custom HTTP LLM
+
+For integrating custom LLMs via HTTP, you can configure the endpoint, optional API key, headers, and request/response transformations.
+
+### Configuration
+
+```typescript
+import { createHttpLLM } from 'spinai/llms/http';
+
+const httpLLMConfig = {
+  endpoint: 'your_custom_http_endpoint',
+  apiKey: 'your_optional_api_key', // Optional
+  headers: { 'Custom-Header': 'Value' }, // Optional
+  transformRequest: (body) => /* transform and return the body */, // Optional
+  transformResponse: (response) => /* transform and return the response as a string */, // Optional
+};
+
+const httpLLM = createHttpLLM(httpLLMConfig);
+```
+
 ## Next Steps
 
 <CardGroup>
@@ -33,4 +74,12 @@ Consider these factors when choosing an LLM:
   <Card title="Anthropic Setup" icon="brain" href="/llms/anthropic">
     Use Claude models
   </Card>
+  <Card title="Cloudflare Setup" icon="cloud" href="/llms/cloudflare">
+    Use Cloudflare models
+  </Card>
+  <Card title="Custom HTTP Setup" icon="code" href="/llms/custom-http">
+    Use Custom HTTP models
+  </Card>
 </CardGroup>
+
+```
