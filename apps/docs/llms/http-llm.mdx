@@ -1,0 +1,65 @@
+---
+title: "Custom HTTP LLM Integration"
+description: "Learn how to implement custom HTTP-based LLM solutions with SpinAI."
+---
+
+## Introduction
+
+Integrating custom HTTP-based Large Language Models (LLMs) allows developers to leverage specific or proprietary language models within their applications. This documentation outlines how to configure and use a custom HTTP LLM with SpinAI, enabling you to extend the capabilities of your applications with your own or third-party language processing services.
+
+## Creating a Custom Integration
+
+To create a custom HTTP LLM integration, you need to define a configuration that specifies the endpoint of your LLM service, optional API keys, headers, and functions to transform requests and responses. This setup enables your application to communicate with the LLM service effectively.
+
+```typescript
+import { createHttpLLM } from "spinai/src/llms/http";
+
+const httpLLMConfig = {
+  endpoint: "https://your.llm.endpoint",
+  apiKey: "your_api_key", // Optional
+  headers: { "Custom-Header": "Value" }, // Optional
+  transformRequest: (body) => {/* Transform the request body if needed */},
+  transformResponse: (response) => {/* Transform the response to a string */},
+};
+
+const llm = createHttpLLM(httpLLMConfig);
+```
+
+## Usage Examples
+
+### Setting up a custom HTTP LLM
+
+Once you have configured your custom HTTP LLM, you can use it to complete prompts. The `complete` method allows you to send prompts to your LLM and receive responses based on your configurations.
+
+```typescript
+const completionOptions = {
+  prompt: "What is the capital of France?",
+  maxTokens: 64,
+};
+
+llm.complete(completionOptions).then((result) => {
+  console.log(result.content); // Process the LLM's response
+});
+```
+
+### Custom integration with token counting
+
+The custom HTTP LLM integration automatically estimates the number of input and output tokens, which can be useful for tracking usage and costs. This feature is particularly important when the LLM endpoint does not provide token counts.
+
+```typescript
+llm.complete(completionOptions).then((result) => {
+  console.log(`Input Tokens: ${result.inputTokens}, Output Tokens: ${result.outputTokens}`);
+});
+```
+
+## Cost Estimation
+
+For custom HTTP LLM integrations, SpinAI provides a utility to estimate the cost of each request based on the number of tokens processed. This estimation helps in managing and forecasting the expenses associated with using custom LLM services.
+
+```typescript
+llm.complete(completionOptions).then((result) => {
+  console.log(`Estimated Cost: ${result.costCents} cents`);
+});
+```
+
+By following these guidelines, developers can effectively integrate custom HTTP LLMs into their applications, enhancing their capabilities with advanced language processing features.
