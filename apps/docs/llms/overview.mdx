@@ -7,6 +7,8 @@ SpinAI supports multiple LLMs for agent decision making:
 
 - [OpenAI](/llms/openai)
 - [Anthropic](/llms/anthropic)
+- [Cloudflare](/llms/cloudflare) {/* New addition */}
+- [Custom HTTP Endpoints](/llms/custom-http) {/* New addition */}
 
 Each LLM can be configured with custom settings like:
 
@@ -33,4 +35,45 @@ Consider these factors when choosing an LLM:
   <Card title="Anthropic Setup" icon="brain" href="/llms/anthropic">
     Use Claude models
   </Card>
+  <Card title="Cloudflare Setup" icon="cloud" href="/llms/cloudflare"> {/* New addition */}
+    Use Cloudflare models
+  </Card>
+  <Card title="Custom HTTP Setup" icon="code" href="/llms/custom-http"> {/* New addition */}
+    Use Custom HTTP models
+  </Card>
 </CardGroup>
+
+{/* New sections for Cloudflare and Custom HTTP LLMs */}
+
+## Cloudflare AI Integration
+
+SpinAI now supports Cloudflare AI models, including the LLaMA-2 series and Mistral models. To use Cloudflare AI with SpinAI, you need to provide your Cloudflare API token and Account ID. The default model used is `@cf/meta/llama-2-7b-chat-int8`.
+
+```typescript
+import { createCloudflareAILLM } from 'spinai/llms/cloudflare';
+
+const cloudflareConfig = {
+  apiToken: 'your_cloudflare_api_token',
+  accountId: 'your_cloudflare_account_id',
+  model: '@cf/meta/llama-2-7b-chat-int8', // Optional
+};
+
+const cloudflareLLM = createCloudflareAILLM(cloudflareConfig);
+```
+
+## Custom HTTP Endpoints
+
+For maximum flexibility, SpinAI also allows integrating custom HTTP endpoints as LLMs. This is useful for proprietary models or specialized use cases. You can configure the endpoint, optional API key, custom headers, and request/response transformations.
+
+```typescript
+import { createHttpLLM } from 'spinai/llms/http';
+
+const httpLLMConfig = {
+  endpoint: 'https://your.custom.model/endpoint',
+  apiKey: 'optional_api_key', // Optional
+  headers: { 'Custom-Header': 'Value' }, // Optional
+  transformRequest: (body) => body, // Optional
+  transformResponse: (response) => response, // Optional
+};
+
+const httpLLM = createHttpLLM(httpLLMConfig);
