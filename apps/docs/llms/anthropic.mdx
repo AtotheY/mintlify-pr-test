@@ -1,3 +1,4 @@
+```mdx
 ---
 title: "Anthropic"
 description: "Using Claude models with SpinAI"
@@ -31,4 +32,22 @@ interface AnthropicConfig {
   temperature?: number; // Defaults to 0.7
   maxTokens?: number; // Defaults to 1024
 }
+```
+
+## Supported Models
+
+In addition to the Anthropic models, SpinAI now supports a variety of Cloudflare AI models. Here are the newly supported models and their respective token costs for input and output:
+
+- **Cloudflare AI Models:**
+  - `@cf/meta/llama-2-7b-chat-int8`: 0.2 tokens per input, 0.4 tokens per output
+  - `@cf/meta/llama-2-13b-chat-int8`: 0.4 tokens per input, 0.8 tokens per output
+  - `@cf/meta/llama-2-70b-chat-int8`: 1.0 tokens per input, 2.0 tokens per output
+  - `@cf/mistral/mistral-7b-instruct-v0.1`: 0.2 tokens per input, 0.4 tokens per output
+  - `@cf/tiiuae/falcon-7b-instruct`: 0.2 tokens per input, 0.4 tokens per output
+  - `@cf/anthropic/claude-instant-1.2`: 0.8 tokens per input, 2.4 tokens per output
+  - `@cf/anthropic/claude-2.1`: 8.0 tokens per input, 24.0 tokens per output
+  - `custom-http-model`: 0.5 tokens per input, 1.5 tokens per output
+
+This expansion allows for a broader selection of models to be used within your applications, providing flexibility in choosing the right model for your specific needs.
+
 ```
