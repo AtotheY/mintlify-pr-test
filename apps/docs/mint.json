@@ -64,7 +64,9 @@
       "pages": [
         "llms/overview",
         "llms/openai",
-        "llms/anthropic"
+        "llms/anthropic",
+        "llms/cloudflare",
+        "llms/http-llm"
       ]
     },
     {
