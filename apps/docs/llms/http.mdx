@@ -1,0 +1,87 @@
+```mdx
+---
+title: "HTTP LLM Integration"
+description: "Integrating custom HTTP-based language models with SpinAI"
+---
+
+## Overview
+
+SpinAI introduces the capability to integrate custom HTTP-based language models (LLMs) into your applications. This functionality allows for the use of any language model that can be accessed over HTTP, providing flexibility and control over the language processing capabilities within your projects. The `createHttpLLM` function is designed to facilitate this integration, offering a straightforward approach to configuring and utilizing custom LLMs.
+
+## Installation
+
+Ensure you have the SpinAI package installed in your project. If not, you can add it using npm or yarn:
+
+```bash
+npm install spinai
+# or
+yarn add spinai
+```
+
+## Usage
+
+To use a custom HTTP LLM, you need to create an instance of the LLM with the `createHttpLLM` function. This function requires a configuration object with details about how to interact with your custom LLM endpoint.
+
+```typescript
+import { createHttpLLM } from "spinai";
+
+const httpLLM = createHttpLLM({
+  endpoint: "https://your.custom.llm/endpoint",
+  apiKey: "your_api_key", // Optional
+  headers: {
+    // Optional custom headers
+    "Custom-Header": "Value",
+  },
+  transformRequest: (body) => {
+    // Optional transformation of the request body
+    return body;
+  },
+  transformResponse: (response) => {
+    // Optional transformation of the response to a string
+    return response.result;
+  },
+});
+```
+
+## Configuration
+
+The `createHttpLLM` function accepts a configuration object with the following properties:
+
+```typescript
+interface HttpLLMConfig {
+  endpoint: string;
+  apiKey?: string;
+  headers?: Record<string, string>;
+  transformRequest?: (body: unknown) => unknown;
+  transformResponse?: (response: unknown) => string;
+}
+```
+
+- `endpoint`: The URL of the custom LLM endpoint.
+- `apiKey`: An optional API key for authentication with the LLM endpoint.
+- `headers`: Optional additional headers to include in the request to the LLM.
+- `transformRequest`: An optional function to transform the request body before sending it to the LLM.
+- `transformResponse`: An optional function to transform the response from the LLM into a string.
+
+## Completing Prompts
+
+Once you have an instance of your custom HTTP LLM, you can use it to complete prompts as follows:
+
+```typescript
+const completionOptions = {
+  prompt: "The quick brown fox",
+  temperature: 0.5,
+  maxTokens: 100,
+};
+
+httpLLM.complete(completionOptions).then((result) => {
+  console.log(result.content); // The completed text
+});
+```
+
+This example sends a prompt to the custom LLM and logs the completed text. The `complete` method returns a promise that resolves with the completion result, which includes the content, estimated tokens used, and the cost.
+
+## Conclusion
+
+The HTTP LLM integration feature in SpinAI offers a powerful and flexible way to incorporate custom language models into your applications. By following the steps outlined in this documentation, you can easily set up and use any HTTP-accessible language model with SpinAI.
+```
