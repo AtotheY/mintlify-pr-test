@@ -7,6 +7,8 @@ SpinAI supports multiple LLMs for agent decision making:
 
 - [OpenAI](/llms/openai)
 - [Anthropic](/llms/anthropic)
+- [Cloudflare](/llms/cloudflare)
+- Custom HTTP-based LLMs
 
 Each LLM can be configured with custom settings like:
 
@@ -24,6 +26,48 @@ Consider these factors when choosing an LLM:
 - API reliability
 - Token context limits
 
+## Cloudflare AI Integration
+
+SpinAI now supports Cloudflare's LLMs, offering a range of models including LLaMA and Mistral. To use Cloudflare AI, you need to configure it with your API token and account ID. Optionally, you can specify the model to use; otherwise, the default model is used.
+
+```typescript
+import { createCloudflareAILLM } from 'spinai/llms/cloudflare';
+
+const cloudflareConfig = {
+  apiToken: 'your_cloudflare_api_token',
+  accountId: 'your_cloudflare_account_id',
+  model: '@cf/meta/llama-2-7b-chat-int8', // Optional
+};
+
+const cloudflareLLM = createCloudflareAILLM(cloudflareConfig);
+```
+
+## Custom HTTP-based LLMs
+
+For maximum flexibility, SpinAI also allows integrating any custom HTTP-based LLM. You'll need to provide the endpoint, and optionally, API keys, custom headers, and functions to transform requests and responses.
+
+```typescript
+import { createHttpLLM } from 'spinai/llms/http';
+
+const httpLLMConfig = {
+  endpoint: 'https://your.custom.llm/api',
+  apiKey: 'optional_api_key',
+  headers: {
+    'Custom-Header': 'value',
+  },
+  transformRequest: (body) => {
+    // Modify the request body as needed
+    return body;
+  },
+  transformResponse: (response) => {
+    // Parse and transform the response as needed
+    return response;
+  },
+};
+
+const httpLLM = createHttpLLM(httpLLMConfig);
+```
+
 ## Next Steps
 
 <CardGroup>
@@ -32,5 +76,11 @@ Consider these factors when choosing an LLM:
   </Card>
   <Card title="Anthropic Setup" icon="brain" href="/llms/anthropic">
     Use Claude models
+  </Card>
+  <Card title="Cloudflare Setup" icon="cloud" href="/llms/cloudflare">
+    Use Cloudflare models
+  </Card>
+  <Card title="Custom HTTP LLM Setup" icon="code" href="/llms/custom-http">
+    Configure your custom HTTP-based LLM
   </Card>
 </CardGroup>
