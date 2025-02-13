@@ -84,7 +84,8 @@
     {
       "group": "Llms",
       "pages": [
-        "apps/docs/llms/cloudflare"
+        "apps/docs/llms/cloudflare",
+        "apps/docs/llms/http-llm"
       ]
     }
   ],
