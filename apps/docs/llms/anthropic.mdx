@@ -1,3 +1,4 @@
+```mdx
 ---
 title: "Anthropic"
 description: "Using Claude models with SpinAI"
@@ -31,4 +32,77 @@ interface AnthropicConfig {
   temperature?: number; // Defaults to 0.7
   maxTokens?: number; // Defaults to 1024
 }
+```
+
+## Cloudflare AI Integration
+
+SpinAI now supports integration with Cloudflare AI. You can create a Cloudflare AI LLM with the following configuration:
+
+```typescript
+import { createCloudflareAILLM } from "spinai";
+
+const cloudflareLLM = createCloudflareAILLM({
+  apiToken: process.env.CLOUDFLARE_API_TOKEN,
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  model: "@cf/meta/llama-2-7b-chat-int8", // Optional
+});
+
+// Example usage with an agent
+const agent = createAgent({
+  instructions: "Provide customer support using Cloudflare AI",
+  actions: [getCustomerInfo, createTicket],
+  llm: cloudflareLLM,
+});
+```
+
+### Cloudflare AI Configuration
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string;
+  accountId: string;
+  model?: string; // Defaults to "@cf/meta/llama-2-7b-chat-int8"
+}
+```
+
+## HTTP LLM Integration
+
+For custom LLM integrations, SpinAI introduces the HTTP LLM. This allows you to connect to any HTTP-based LLM service with a customizable request and response handling.
+
+```typescript
+import { createHttpLLM } from "spinai";
+
+const httpLLM = createHttpLLM({
+  endpoint: "https://your.custom.llm/endpoint",
+  apiKey: "Your-API-Key", // Optional
+  headers: { "Custom-Header": "Value" }, // Optional
+  transformRequest: (body) => {
+    // Transform the request body as needed
+    return body;
+  },
+  transformResponse: (response) => {
+    // Transform the response data as needed
+    return response;
+  },
+});
+
+// Example usage with an agent
+const agent = createAgent({
+  instructions: "Perform actions using a custom HTTP LLM",
+  actions: [customAction1, customAction2],
+  llm: httpLLM,
+});
+```
+
+### HTTP LLM Configuration
+
+```typescript
+interface HttpLLMConfig {
+  endpoint: string;
+  apiKey?: string;
+  headers?: Record<string, string>;
+  transformRequest?: (body: unknown) => unknown;
+  transformResponse?: (response: unknown) => string;
+}
+```
 ```
