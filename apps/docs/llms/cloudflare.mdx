@@ -1,0 +1,89 @@
+---
+title: "Cloudflare AI Integration"
+description: "Integrating Cloudflare's AI services with SpinAI for enhanced language model capabilities."
+---
+
+## Overview
+
+This documentation covers the integration of Cloudflare's AI services into the SpinAI framework, enabling developers to leverage Cloudflare's language models for various applications. The integration is facilitated through the `createCloudflareAILLM` function, which configures and initializes a connection to Cloudflare's AI based on specified parameters.
+
+## Installation
+
+To use Cloudflare's AI services within your SpinAI project, ensure you have the `spinai` package installed. If not, you can add it to your project using npm or yarn:
+
+```bash
+npm install spinai
+# or
+yarn add spinai
+```
+
+## Configuration
+
+Before using Cloudflare's AI services, you need to configure the `CloudflareConfig` object. This configuration requires your Cloudflare API token and Account ID, with an optional model specification.
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string;
+  accountId: string;
+  model?: string; // Optional, defaults to "@cf/meta/llama-2-7b-chat-int8"
+}
+```
+
+## Usage
+
+To create a Cloudflare AI language model instance, use the `createCloudflareAILLM` function with your configuration. This instance can then be used to generate text completions based on prompts you provide.
+
+```typescript
+import { createCloudflareAILLM } from "spinai";
+
+const cloudflareAILLM = createCloudflareAILLM({
+  apiToken: process.env.CLOUDFLARE_API_TOKEN,
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  model: "@cf/meta/llama-2-7b-chat-int8", // Optional
+});
+
+// Example usage
+async function generateText(prompt: string) {
+  const completion = await cloudflareAILLM.complete({
+    prompt,
+    temperature: 0.7, // Optional
+    maxTokens: 1024, // Optional
+  });
+
+  console.log(completion.content);
+}
+```
+
+## Handling Responses
+
+The `complete` method returns a `Promise` that resolves to a `CompletionResult`, containing the generated text and other relevant information such as token counts and estimated cost.
+
+```typescript
+interface CompletionResult<T> {
+  content: T;
+  inputTokens: number;
+  outputTokens: number;
+  costCents: number;
+  rawInput: string;
+  rawOutput: string;
+}
+```
+
+## Error Handling
+
+If the Cloudflare AI service encounters an error, such as invalid API credentials or network issues, the `complete` method will throw an error. Ensure to catch and handle these errors appropriately in your application.
+
+```typescript
+async function generateTextSafe(prompt: string) {
+  try {
+    const completion = await cloudflareAILLM.complete({ prompt });
+    console.log(completion.content);
+  } catch (error) {
+    console.error("Failed to generate text:", error);
+  }
+}
+```
+
+## Conclusion
+
+Integrating Cloudflare's AI services with SpinAI allows for powerful language model capabilities within your applications. By configuring and utilizing the `createCloudflareAILLM` function, you can enhance your projects with advanced text generation and processing features offered by Cloudflare AI.
