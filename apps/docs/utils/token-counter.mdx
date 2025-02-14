@@ -1,0 +1,56 @@
+---
+title: Using the Token Counter Utility
+description: Learn how to use the tokenCounter utility to calculate token costs for various language models, including Cloudflare AI models and custom HTTP models.
+---
+
+## Introduction
+
+The `tokenCounter` utility is a crucial tool for developers working with language models, enabling the calculation of token costs associated with processing input and output text. This utility has been updated to support a wider range of models, including Cloudflare AI models and custom HTTP models, providing a more comprehensive tool for managing and estimating the costs of using different language models.
+
+## How It Works
+
+The `tokenCounter` utility calculates the number of tokens for a given text input or output, which is essential for estimating the cost of using language models. The utility now includes predefined costs for a variety of models, including newer additions from Cloudflare AI and options for custom HTTP models. The cost calculation is based on the specific model's input and output token costs, allowing for accurate budgeting and resource allocation when using these models.
+
+## Integrating with LLMs
+
+To integrate the `tokenCounter` utility with large language models (LLMs), you need to understand the token cost structure of the model you are working with. The utility has been updated to include token costs for several Cloudflare AI models and provides a framework for integrating custom HTTP models by specifying their token costs.
+
+### Cloudflare AI Models
+
+The utility now supports token cost calculation for various Cloudflare AI models, including different versions of LLaMA and Mistral, as well as models from TIIUAE and Anthropic. This update makes it easier to work with these models by providing predefined token costs for input and output, simplifying the process of estimating and managing usage costs.
+
+### Custom HTTP Models
+
+For custom HTTP models, the utility allows developers to define their own token costs for input and output. This flexibility ensures that the utility can be used with a wide range of models, even those not included in the predefined list, by manually specifying the token costs associated with the custom model.
+
+## Examples
+
+### Calculating token costs for Cloudflare
+
+To calculate the token costs for a Cloudflare AI model, you can use the `tokenCounter` utility by specifying the model ID and the text for which you want to calculate the token cost. Here's an example for calculating the cost of using the `@cf/meta/llama-2-7b-chat-int8` model:
+
+```typescript
+import { calculateTokenCost } from './tokenCounter';
+
+const modelId = "@cf/meta/llama-2-7b-chat-int8";
+const text = "Your input text here";
+const cost = calculateTokenCost(modelId, text);
+
+console.log(`Token cost for model ${modelId}:`, cost);
+```
+
+### Calculating token costs for custom HTTP LLMs
+
+For custom HTTP models, you first need to define the token costs in the `MODEL_COSTS` object within the `tokenCounter` utility. Once defined, you can calculate the token costs in a similar manner:
+
+```typescript
+import { calculateTokenCost } from './tokenCounter';
+
+const modelId = "custom-http-model"; // Ensure this ID matches the one defined in MODEL_COSTS
+const text = "Your input text here";
+const cost = calculateTokenCost(modelId, text);
+
+console.log(`Token cost for custom model ${modelId}:`, cost);
+```
+
+By utilizing the `tokenCounter` utility, developers can efficiently manage and estimate the costs associated with using various language models, including both predefined models and custom implementations. This tool is invaluable for budgeting, resource allocation, and overall project management in AI and NLP applications.
