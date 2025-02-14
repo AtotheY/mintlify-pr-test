@@ -7,6 +7,8 @@ SpinAI supports multiple LLMs for agent decision making:
 
 - [OpenAI](/llms/openai)
 - [Anthropic](/llms/anthropic)
+- [Cloudflare](/llms/cloudflare)
+- [Custom HTTP LLM](/llms/http-llm)
 
 Each LLM can be configured with custom settings like:
 
@@ -24,6 +26,30 @@ Consider these factors when choosing an LLM:
 - API reliability
 - Token context limits
 
+## Cloudflare Integration
+
+SpinAI now includes support for Cloudflare's LLM, offering a direct integration with Cloudflare's AI platform. This allows for leveraging Cloudflare's efficient and scalable infrastructure for LLM tasks.
+
+To use Cloudflare LLM, you need:
+
+- A Cloudflare account
+- An API token with AI access
+- The account ID where the LLM will be deployed
+
+Cloudflare LLMs can be particularly cost-effective and offer a unique set of models, including the latest LLaMA variants.
+
+## Custom HTTP LLM Integration
+
+For maximum flexibility, SpinAI also supports custom HTTP LLM integrations. This allows you to connect any LLM that offers an HTTP API, providing a way to use proprietary or niche models not directly supported by SpinAI.
+
+To integrate a custom HTTP LLM, you need:
+
+- The endpoint URL for the LLM API
+- Optionally, an API key if the endpoint requires authentication
+- Custom request and response transformation functions, if the API's request/response format does not match SpinAI's default
+
+This feature is designed for advanced users who need to integrate specialized language models or require complete control over their LLM infrastructure.
+
 ## Next Steps
 
 <CardGroup>
@@ -33,4 +59,12 @@ Consider these factors when choosing an LLM:
   <Card title="Anthropic Setup" icon="brain" href="/llms/anthropic">
     Use Claude models
   </Card>
+  <Card title="Cloudflare Setup" icon="cloud" href="/llms/cloudflare">
+    Use Cloudflare models
+  </Card>
+  <Card title="Custom HTTP LLM Setup" icon="custom" href="/llms/http-llm">
+    Integrate with any HTTP LLM
+  </Card>
 </CardGroup>
+
+SpinAI's support for a wide range of LLMs, including Cloudflare and custom HTTP integrations, ensures that you can select the best language model for your needs, balancing cost, performance, and ease of use.
