@@ -1,0 +1,106 @@
+---
+title: "Integrating Custom HTTP LLM"
+description: "Learn how to integrate custom HTTP-based Language Learning Models (LLMs) with SpinAI for advanced natural language processing capabilities."
+---
+
+## Introduction
+
+Integrating custom HTTP-based Language Learning Models (LLMs) allows developers to leverage external natural language processing services within the SpinAI ecosystem. This flexibility enables the use of specialized models that are not natively supported by SpinAI, providing a broader range of capabilities for applications.
+
+## Setup and Configuration
+
+To get started with a custom HTTP LLM, you need to configure it with the necessary endpoint and authentication details. The configuration includes specifying the HTTP endpoint, optional API key for authentication, and additional headers as required by the external service.
+
+```typescript
+import { createHttpLLM } from "spinai/src/llms/http";
+
+const httpLLMConfig = {
+  endpoint: "https://your-custom-llm-service.com/api",
+  apiKey: "your_api_key_here", // Optional
+  headers: {
+    "Custom-Header": "Value" // Optional
+  },
+  transformRequest: (body) => {
+    // Optional transformation of the request body before sending
+    return body;
+  },
+  transformResponse: (response) => {
+    // Optional transformation of the response data
+    return response;
+  }
+};
+
+const llm = createHttpLLM(httpLLMConfig);
+```
+
+## Usage Examples
+
+### Basic HTTP LLM setup
+
+This example demonstrates how to set up and use a basic HTTP LLM for processing natural language queries.
+
+```typescript
+import { createAgent } from "spinai";
+import { createHttpLLM } from "spinai/src/llms/http";
+
+// Configuration for the HTTP LLM
+const httpLLMConfig = {
+  endpoint: "https://your-custom-llm-service.com/api",
+  apiKey: "your_api_key_here",
+};
+
+// Creating the HTTP LLM
+const llm = createHttpLLM(httpLLMConfig);
+
+// Creating an agent with the custom HTTP LLM
+const agent = createAgent({
+  instructions: "Provide concise summaries for articles",
+  actions: [], // Define actions as needed
+  llm,
+});
+
+// Example usage of the agent
+async function summarizeArticle(article) {
+  const summary = await agent.act({
+    prompt: `Summarize the following article: ${article}`,
+  });
+  console.log(summary);
+}
+```
+
+### Advanced Configuration
+
+For more advanced use cases, you can customize the request and response handling using `transformRequest` and `transformResponse` functions. This allows for pre-processing of the request body and post-processing of the response, enabling compatibility with a wide range of external services.
+
+```typescript
+const httpLLMConfig = {
+  endpoint: "https://your-custom-llm-service.com/api",
+  apiKey: "your_api_key_here",
+  transformRequest: (body) => {
+    // Modify the request body as needed
+    body.customField = "customValue";
+    return body;
+  },
+  transformResponse: (response) => {
+    // Extract and return the relevant part of the response
+    return response.customResponseField;
+  }
+};
+```
+
+## Cost Estimation
+
+The custom HTTP LLM integration includes functionality to estimate the cost of each request based on token usage. This estimation is crucial for managing and optimizing the usage costs associated with external language models.
+
+```typescript
+// After making a request with the custom HTTP LLM
+const result = await llm.complete({
+  prompt: "What is the weather like today?",
+  maxTokens: 1024,
+});
+
+console.log(`Estimated cost (in cents): ${result.costCents}`);
+console.log(`Input tokens: ${result.inputTokens}, Output tokens: ${result.outputTokens}`);
+```
+
+This documentation provides an overview of integrating custom HTTP LLMs with SpinAI. By following these guidelines, developers can extend their applications with powerful natural language processing capabilities from a variety of external services.
