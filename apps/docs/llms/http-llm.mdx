@@ -1,0 +1,81 @@
+---
+title: "Custom HTTP LLM Integration"
+description: "Learn how to integrate custom HTTP-based Language Learning Models (LLMs) with your applications."
+---
+
+## Introduction
+
+Integrating custom HTTP-based Language Learning Models (LLMs) allows developers to leverage external or proprietary language models within their applications. This documentation covers the setup, configuration, and usage of custom HTTP LLMs, enabling seamless integration and interaction with custom language models over HTTP.
+
+## Setup and Configuration
+
+To begin using a custom HTTP LLM, you need to configure it with the necessary endpoint and optional parameters such as API keys and headers. The `createHttpLLM` function facilitates this integration.
+
+```typescript
+import { createHttpLLM } from "spinai";
+
+const httpLLM = createHttpLLM({
+  endpoint: "https://your.custom.llm.endpoint",
+  apiKey: "your_api_key", // Optional
+  headers: { "Custom-Header": "Value" }, // Optional
+  transformRequest: (body) => {/* Transform the request body if needed */},
+  transformResponse: (response) => {/* Transform the response to a string */},
+});
+```
+
+### Configuration Options
+
+- **endpoint**: The URL of the HTTP endpoint for the LLM.
+- **apiKey**: An optional API key for authentication with the LLM endpoint.
+- **headers**: Optional additional headers to include in the request to the LLM.
+- **transformRequest**: An optional function to transform the request body before sending.
+- **transformResponse**: An optional function to transform the response into a string.
+
+## Token Cost Calculation
+
+The custom HTTP LLM integration includes an estimation of token usage, which is crucial for understanding and managing the cost associated with LLM requests. The cost is calculated based on the input and output characters, assuming an average token size.
+
+```typescript
+const estimatedInputTokens = Math.ceil(inputChars / 4);
+const estimatedOutputTokens = Math.ceil(outputChars / 4);
+const costCents = calculateCost(estimatedInputTokens, estimatedOutputTokens, "custom-http-model");
+```
+
+## Examples
+
+### Custom HTTP LLM Setup
+
+This example demonstrates how to set up a custom HTTP LLM with basic configuration.
+
+```typescript
+const httpLLM = createHttpLLM({
+  endpoint: "https://example.com/llm",
+  apiKey: "example_api_key",
+});
+```
+
+### Token Cost Calculation Example
+
+The following snippet shows how the token cost calculation is integrated into the LLM completion process.
+
+```typescript
+const completionResult = await httpLLM.complete({
+  prompt: "Translate the following text to French:",
+  maxTokens: 1024,
+});
+
+console.log(`Estimated cost: ${completionResult.costCents} cents`);
+```
+
+## Best Practices
+
+- **Secure Your API Keys**: Always secure your API keys and other sensitive data. Avoid hard-coding them in your source code.
+- **Handle Errors Gracefully**: Implement error handling for HTTP request failures and unexpected response formats.
+- **Optimize Token Usage**: Be mindful of the maxTokens parameter to manage costs effectively.
+
+## Troubleshooting
+
+- **HTTP Request Failures**: Ensure the endpoint URL is correct and the server is accessible. Check for any required headers or authentication methods.
+- **Invalid Responses**: Verify that the `transformResponse` function correctly handles the response format from your LLM.
+
+For more detailed information on integrating other types of LLMs, refer to the [LLMs Overview](/docs/llms/overview).
