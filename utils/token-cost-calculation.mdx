@@ -1,0 +1,72 @@
+---
+title: Token Cost Calculation Updates
+description: Learn about the updated token cost calculation logic to accommodate new LLM integrations, including Cloudflare AI models and custom HTTP models.
+---
+
+## Updated Token Cost Calculation Logic
+
+The `tokenCounter` utility has been updated to support a broader range of language learning models (LLMs), including new integrations with Cloudflare AI models and custom HTTP models. This update introduces changes to the token cost calculation logic, ensuring accurate cost estimations across a wider variety of models. The following models have been added to the `MODEL_COSTS` configuration:
+
+- Cloudflare AI Models:
+  - `@cf/meta/llama-2-7b-chat-int8`
+  - `@cf/meta/llama-2-13b-chat-int8`
+  - `@cf/meta/llama-2-70b-chat-int8`
+  - `@cf/mistral/mistral-7b-instruct-v0.1`
+  - `@cf/tiiuae/falcon-7b-instruct`
+  - `@cf/anthropic/claude-instant-1.2`
+  - `@cf/anthropic/claude-2.1`
+- Custom HTTP Model:
+  - `custom-http-model`
+
+Each model has specific input and output token costs associated with it, which are crucial for calculating the total cost of processing text through these models.
+
+```typescript
+type ModelId = keyof typeof MODEL_COSTS;
+
+const MODEL_COSTS = {
+  // Existing models...
+  "claude-2.1": { input: 8, output: 24 },
+  "claude-2.0": { input: 8, output: 24 },
+  "claude-instant-1.2": { input: 0.8, output: 2.4 },
+
+  // Cloudflare AI Models
+  "@cf/meta/llama-2-7b-chat-int8": { input: 0.2, output: 0.4 },
+  "@cf/meta/llama-2-13b-chat-int8": { input: 0.4, output: 0.8 },
+  "@cf/meta/llama-2-70b-chat-int8": { input: 1.0, output: 2.0 },
+  "@cf/mistral/mistral-7b-instruct-v0.1": { input: 0.2, output: 0.4 },
+  "@cf/tiiuae/falcon-7b-instruct": { input: 0.2, output: 0.4 },
+  "@cf/anthropic/claude-instant-1.2": { input: 0.8, output: 2.4 },
+  "@cf/anthropic/claude-2.1": { input: 8.0, output: 24.0 },
+
+  // Custom HTTP Model
+  "custom-http-model": { input: 0.5, output: 1.5 },
+} as const;
+```
+
+### Token cost calculation with Cloudflare
+
+When calculating token costs for Cloudflare AI models, the utility references the specific input and output costs defined in `MODEL_COSTS`. For example, to calculate the cost of processing text with the `@cf/meta/llama-2-7b-chat-int8` model:
+
+```typescript
+const modelId: ModelId = "@cf/meta/llama-2-7b-chat-int8";
+const inputTokens = 100; // Example input token count
+const outputTokens = 50; // Example output token count
+
+const totalCost = (MODEL_COSTS[modelId].input * inputTokens) + (MODEL_COSTS[modelId].output * outputTokens);
+console.log(`Total token cost for ${modelId}:`, totalCost);
+```
+
+### Token cost calculation with custom HTTP
+
+For custom HTTP models, such as the `custom-http-model`, the calculation follows the same pattern, utilizing the input and output costs specified:
+
+```typescript
+const modelId: ModelId = "custom-http-model";
+const inputTokens = 200; // Example input token count
+const outputTokens = 100; // Example output token count
+
+const totalCost = (MODEL_COSTS[modelId].input * inputTokens) + (MODEL_COSTS[modelId].output * outputTokens);
+console.log(`Total token cost for ${modelId}:`, totalCost);
+```
+
+This update ensures that developers can accurately estimate the costs associated with processing text through a variety of models, including those offered by Cloudflare AI and custom HTTP endpoints, facilitating more efficient and cost-effective integrations.
