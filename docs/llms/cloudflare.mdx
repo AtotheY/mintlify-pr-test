@@ -1,0 +1,131 @@
+---
+title: Using Cloudflare with Your LLMs
+description: Learn how to integrate Cloudflare's AI services with your language models for enhanced performance and capabilities.
+---
+
+## Introduction
+
+Cloudflare's AI Language Learning Models (LLMs) offer a powerful way to enhance your applications with advanced natural language processing capabilities. This documentation will guide you through the process of integrating Cloudflare LLMs into your projects, including configuration, creating instances, and understanding token cost calculations.
+
+## Configuration
+
+Before you can start using Cloudflare LLMs, you need to configure your environment with the necessary credentials. The `CloudflareConfig` interface requires the following properties:
+
+- `apiToken`: Your Cloudflare API token.
+- `accountId`: Your Cloudflare account ID.
+- `model`: (Optional) The specific model you wish to use. If not provided, a default model is used.
+
+```typescript
+interface CloudflareConfig {
+  apiToken: string;
+  accountId: string;
+  model?: string;
+}
+```
+
+Ensure that your Cloudflare API token and account ID are securely stored and accessible in your environment variables or configuration files.
+
+## Creating Cloudflare LLMs
+
+To create a Cloudflare LLM instance, use the `createCloudflareAILLM` function. This function takes a `CloudflareConfig` object as its argument and returns an LLM instance configured to communicate with Cloudflare's AI services.
+
+```typescript
+function createCloudflareAILLM(config: CloudflareConfig): LLM
+```
+
+### Example: Basic Cloudflare LLM Setup
+
+```typescript
+import { createCloudflareAILLM } from "./llms/cloudflare";
+
+const config = {
+  apiToken: "your_cloudflare_api_token",
+  accountId: "your_cloudflare_account_id",
+};
+
+const llm = createCloudflareAILLM(config);
+```
+
+### Example: Advanced Cloudflare LLM Configuration
+
+```typescript
+const advancedConfig = {
+  apiToken: "your_cloudflare_api_token",
+  accountId: "your_cloudflare_account_id",
+  model: "@cf/meta/llama-2-7b-chat-int8", // Specifying a custom model
+};
+
+const advancedLLM = createCloudflareAILLM(advancedConfig);
+```
+
+## Token Cost Calculation
+
+Cloudflare AI does not directly provide token counts for requests and responses. Instead, the token cost is estimated based on the character count of the input prompt and the output content. The `calculateCost` function is used to estimate the cost of each request, which is crucial for managing usage and costs effectively.
+
+```typescript
+const estimatedInputTokens = Math.ceil(inputChars / 4);
+const estimatedOutputTokens = Math.ceil(outputChars / 4);
+
+const costCents = calculateCost(estimatedInputTokens, estimatedOutputTokens, model);
+```
+
+Understanding this calculation is important for optimizing your use of Cloudflare LLMs, especially for applications with high request volumes or large input/output data.
+
+## Examples
+
+This section provides practical examples of using Cloudflare LLMs in your projects.
+
+### Basic Cloudflare LLM setup
+
+This example demonstrates setting up a basic Cloudflare LLM instance and making a completion request.
+
+```typescript
+// Assuming `llm` is your Cloudflare LLM instance from the setup example
+async function getCompletion(prompt: string) {
+  const completionOptions = {
+    prompt: prompt,
+    maxTokens: 1024,
+  };
+
+  try {
+    const result = await llm.complete(completionOptions);
+    console.log(result.content);
+  } catch (error) {
+    console.error("Error fetching completion:", error);
+  }
+}
+
+getCompletion("Hello, world!");
+```
+
+### Advanced Cloudflare LLM configuration
+
+This example shows how to use a custom model and schema for more advanced use cases.
+
+```typescript
+// Using the `advancedLLM` instance from the advanced configuration example
+async function getStructuredCompletion(prompt: string) {
+  const completionOptions = {
+    prompt: prompt,
+    schema: {
+      type: "object",
+      properties: {
+        answer: { type: "string" },
+      },
+      required: ["answer"],
+    },
+    maxTokens: 1024,
+  };
+
+  try {
+    const result = await advancedLLM.complete(completionOptions);
+    console.log(result.content);
+  } catch (error) {
+    console.error("Error fetching structured completion:", error);
+  }
+}
+
+getStructuredCompletion("What is the capital of France?");
+```
+
+By following these guidelines and examples, you can effectively integrate Cloudflare's powerful LLMs into your applications, enhancing them with advanced natural language processing capabilities.
