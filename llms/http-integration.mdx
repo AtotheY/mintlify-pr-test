@@ -1,0 +1,100 @@
+---
+title: HTTP LLM Integration
+description: A guide on integrating custom HTTP-based Language Learning Models (LLMs) with your application.
+---
+
+## Overview
+
+This documentation outlines the process of integrating custom HTTP-based Language Learning Models (LLMs) into your applications. By leveraging the `createHttpLLM` function, developers can easily connect to any HTTP endpoint that conforms to their LLM's API requirements. This flexible approach allows for the utilization of various LLMs without being restricted to specific providers.
+
+## Configuration Guide
+
+To begin integrating your custom HTTP LLM, you must first configure the `HttpLLMConfig` object. This configuration includes specifying your LLM's endpoint, optional API key, additional headers, and functions to transform both the request to and the response from your LLM.
+
+### `HttpLLMConfig` Parameters
+
+- `endpoint`: The URL of your LLM's HTTP endpoint.
+- `apiKey`: (Optional) An API key for accessing your LLM if required.
+- `headers`: (Optional) Additional HTTP headers to include in requests to your LLM.
+- `transformRequest`: (Optional) A function to transform the request body before sending it to the LLM.
+- `transformResponse`: (Optional) A function to transform the response from the LLM before processing it.
+
+```typescript
+interface HttpLLMConfig {
+  endpoint: string;
+  apiKey?: string;
+  headers?: Record<string, string>;
+  transformRequest?: (body: unknown) => unknown;
+  transformResponse?: (response: unknown) => string;
+}
+```
+
+## Completion Functions
+
+The core functionality of the HTTP LLM integration is encapsulated in the `complete` function. This function takes a `CompletionOptions` object, sends a request to the configured LLM endpoint, and processes the response.
+
+### `CompletionOptions` Parameters
+
+- `prompt`: The input text or prompt to send to the LLM.
+- `schema`: (Optional) A JSON schema to validate the LLM's response against.
+- `temperature`: (Optional) Controls the randomness of the LLM's output.
+- `maxTokens`: (Optional) The maximum number of tokens the LLM should generate.
+
+### Example: Custom HTTP Integration Setup
+
+```typescript
+import { createHttpLLM, HttpLLMConfig } from './llms/http';
+
+const config: HttpLLMConfig = {
+  endpoint: 'https://your-llm-endpoint.com/api',
+  apiKey: 'your-api-key',
+  headers: {
+    'Custom-Header': 'Value'
+  },
+  transformRequest: (body) => {
+    // Transform the request body if needed
+    return body;
+  },
+  transformResponse: (response) => {
+    // Transform the response if needed
+    return response as string;
+  }
+};
+
+const httpLLM = createHttpLLM(config);
+```
+
+### Example: Using Completion Functions
+
+```typescript
+async function getCompletion() {
+  const options = {
+    prompt: 'Translate the following text to French: "Hello, world!"',
+    maxTokens: 512
+  };
+
+  try {
+    const result = await httpLLM.complete(options);
+    console.log(result.content);
+  } catch (error) {
+    console.error('LLM completion failed:', error);
+  }
+}
+
+getCompletion();
+```
+
+## Token Cost Calculations
+
+The HTTP LLM integration includes an estimation of token usage for cost calculations. Since custom LLM endpoints might not provide token counts, the integration estimates tokens based on the input and output character lengths. This estimation helps in understanding the potential costs associated with using the LLM.
+
+```typescript
+const estimatedInputTokens = Math.ceil(inputChars / 4);
+const estimatedOutputTokens = Math.ceil(outputChars / 4);
+```
+
+The cost is then calculated using these estimated token counts. This feature ensures transparency and helps in managing the usage of LLMs effectively.
+
+For detailed information on token cost calculations, refer to the planned documentation on `utils/token-cost-calculation.mdx`.
+
+By following this guide, developers can seamlessly integrate custom HTTP LLMs into their applications, enabling advanced language learning and processing capabilities.
