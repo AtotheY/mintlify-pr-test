@@ -1,0 +1,90 @@
+---
+title: Creating Custom HTTP LLMs
+description: Guide on setting up and using custom HTTP-based Language Learning Models (LLMs) with SpinAI.
+---
+
+## Overview
+
+Custom HTTP LLMs allow developers to integrate any HTTP-based AI model with the SpinAI platform, providing a flexible way to use external language models. This feature is particularly useful for leveraging specialized models or incorporating models hosted on private infrastructure.
+
+## Configuration
+
+To create a custom HTTP LLM, you need to configure it with the following parameters:
+
+- `endpoint`: The URL of the HTTP endpoint where the model is hosted.
+- `apiKey`: (Optional) An API key for authenticating requests to the endpoint.
+- `headers`: (Optional) Additional HTTP headers to send with each request.
+- `transformRequest`: (Optional) A function to transform the request body before sending it to the model.
+- `transformResponse`: (Optional) A function to transform the response from the model before processing it.
+
+## Creating HTTP LLMs
+
+To create an HTTP LLM, use the `createHttpLLM` function with the appropriate configuration. The function requires an `HttpLLMConfig` object and returns an LLM instance compatible with the SpinAI platform.
+
+```typescript
+import { createHttpLLM, HttpLLMConfig } from 'path/to/http';
+
+const config: HttpLLMConfig = {
+  endpoint: 'https://example.com/model',
+  apiKey: 'your_api_key_here',
+  headers: {
+    'Custom-Header': 'Value'
+  },
+  transformRequest: (body) => {
+    // Modify the request body as needed
+    return body;
+  },
+  transformResponse: (response) => {
+    // Extract and return the desired response format
+    return response.text;
+  }
+};
+
+const httpLLM = createHttpLLM(config);
+```
+
+## Token Cost Calculation
+
+The SpinAI platform estimates the cost of using the custom HTTP LLM based on the number of tokens processed. Since custom models may not provide token counts, the platform calculates an estimated cost based on the character count of the input and output. This estimation assumes an average of 4 characters per token.
+
+```typescript
+const inputChars = prompt.length;
+const outputChars = JSON.stringify(content).length;
+const estimatedInputTokens = Math.ceil(inputChars / 4);
+const estimatedOutputTokens = Math.ceil(outputChars / 4);
+
+const costCents = calculateCost(estimatedInputTokens, estimatedOutputTokens, model);
+```
+
+## Examples
+
+### Basic HTTP LLM setup
+
+This example demonstrates setting up a basic HTTP LLM with minimal configuration.
+
+```typescript
+const basicHttpLLM = createHttpLLM({
+  endpoint: 'https://api.example.com/v1/models/generate'
+});
+```
+
+### Integrating HTTP LLMs with Cloudflare
+
+To integrate an HTTP LLM with Cloudflare Workers, specify the Cloudflare Worker endpoint as the `endpoint` in the configuration. Ensure your Cloudflare Worker is set up to handle requests and forward them to your model.
+
+```typescript
+const cloudflareHttpLLM = createHttpLLM({
+  endpoint: 'https://your-worker.your-subdomain.workers.dev',
+  apiKey: 'optional_api_key',
+  transformRequest: (body) => {
+    // Optionally modify the request body for Cloudflare
+    return body;
+  },
+  transformResponse: (response) => {
+    // Transform the response from Cloudflare to the expected format
+    return response.text;
+  }
+});
+```
+
+By following these guidelines, developers can easily integrate any HTTP-based AI model with the SpinAI platform, leveraging custom language models for a wide range of applications.
