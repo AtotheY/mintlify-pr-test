@@ -1,0 +1,68 @@
+---
+title: Cloudflare LLM Integration
+description: Learn how to configure and use the Cloudflare LLM integration for AI-powered completions.
+---
+
+## Introduction
+
+The Cloudflare LLM integration allows developers to leverage Cloudflare's AI models for generating text completions. This document outlines how to configure the integration and use it to perform AI completions within your applications.
+
+## Configuration
+
+To use the Cloudflare LLM integration, you must first configure it with your Cloudflare API token and Account ID. Optionally, you can specify a model; if not provided, a default model is used.
+
+### Basic Configuration Example
+
+```typescript
+import { createCloudflareAILLM } from 'path/to/cloudflare';
+
+const cloudflareConfig = {
+  apiToken: 'your_cloudflare_api_token',
+  accountId: 'your_cloudflare_account_id',
+  model: '@cf/meta/llama-2-7b-chat-int8', // Optional
+};
+
+const llm = createCloudflareAILLM(cloudflareConfig);
+```
+
+Ensure you replace `'your_cloudflare_api_token'` and `'your_cloudflare_account_id'` with your actual Cloudflare API token and Account ID. The `model` field is optional and defaults to `@cf/meta/llama-2-7b-chat-int8` if not specified.
+
+## Completion Functions
+
+The integration provides a `complete` function to perform AI completions. This function requires a set of options including the prompt, optional schema for structured responses, temperature for creativity control, and max tokens for the response length.
+
+### Completion Function Usage
+
+```typescript
+async function getCompletion() {
+  const completionOptions = {
+    prompt: "What is the capital of France?",
+    temperature: 0.5,
+    maxTokens: 64,
+  };
+
+  try {
+    const result = await llm.complete(completionOptions);
+    console.log(result.content); // AI-generated completion
+  } catch (error) {
+    console.error("Completion failed:", error);
+  }
+}
+```
+
+This example sends a prompt to the Cloudflare AI and logs the AI-generated completion. Adjust `temperature` and `maxTokens` as needed for your use case.
+
+## Token Cost Calculations
+
+The Cloudflare LLM integration includes a mechanism to estimate the cost of each completion request. Cloudflare AI does not provide token counts directly, so the integration estimates costs based on character counts in the input and output.
+
+```typescript
+const result = await llm.complete(completionOptions);
+console.log(`Estimated cost: ${result.costCents} cents`);
+```
+
+This snippet demonstrates how to access the estimated cost of a completion request. It's important to note that these are estimates based on character counts and may not precisely match Cloudflare's billing.
+
+For more detailed information on token cost calculations, refer to the planned documentation on token cost calculation utilities.
+
+By following the steps outlined in this document, you can integrate Cloudflare's AI capabilities into your applications, enabling powerful AI-driven text completions.
