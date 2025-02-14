@@ -1,0 +1,46 @@
+---
+title: Token Cost Calculation Updates
+description: Detailed guide on the updated token cost calculations for various models, including Cloudflare AI models and custom HTTP models.
+---
+
+## Updated Token Cost Logic
+
+The `tokenCounter` utility has been updated to support new token cost calculations for a variety of models. This update is essential for developers integrating language models into their applications, ensuring accurate cost management and billing. The changes include adjustments to token costs for existing models and the addition of Cloudflare AI models and a custom HTTP model option.
+
+## Integrating with LLMs
+
+Language Learning Models (LLMs) have become increasingly popular for a wide range of applications, from chatbots to content generation. The `tokenCounter` utility's latest update includes support for several Cloudflare AI models, providing developers with more options for their AI-driven features.
+
+### Calculating token costs for Cloudflare LLMs
+
+The addition of Cloudflare AI models to the `tokenCounter` utility allows for precise token cost calculations. Here are the newly supported models and their respective token costs:
+
+```typescript
+{
+  "@cf/meta/llama-2-7b-chat-int8": { input: 0.2, output: 0.4 },
+  "@cf/meta/llama-2-13b-chat-int8": { input: 0.4, output: 0.8 },
+  "@cf/meta/llama-2-70b-chat-int8": { input: 1.0, output: 2.0 },
+  "@cf/mistral/mistral-7b-instruct-v0.1": { input: 0.2, output: 0.4 },
+  "@cf/tiiuae/falcon-7b-instruct": { input: 0.2, output: 0.4 },
+  "@cf/anthropic/claude-instant-1.2": { input: 0.8, output: 2.4 },
+  "@cf/anthropic/claude-2.1": { input: 8.0, output: 24.0 }
+}
+```
+
+These models vary in their input and output token costs, reflecting the computational resources required for each. Developers can use these values to estimate the cost of operations accurately.
+
+### Calculating token costs for custom HTTP LLMs
+
+For those integrating custom HTTP-based LLMs, the `tokenCounter` utility now includes a generic model option with predefined token costs. This addition simplifies the integration process for custom models not explicitly listed in the utility.
+
+```typescript
+{
+  "custom-http-model": { input: 0.5, output: 1.5 }
+}
+```
+
+This model assumes a base cost for input and output tokens, which can be adjusted as needed based on the specific characteristics of the custom model being used.
+
+## Conclusion
+
+The updated `tokenCounter` utility expands its support to include Cloudflare AI models and a generic option for custom HTTP models, alongside adjustments to existing model costs. These updates ensure developers can accurately calculate token costs for a broader range of LLMs, facilitating more efficient and cost-effective integrations.
