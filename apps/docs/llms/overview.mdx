@@ -1,36 +1,59 @@
 ---
-title: "LLM Support"
-description: "Language models supported by SpinAI"
+title: "Overview of LLM Integrations"
+description: "Comprehensive guide on Language Models supported by SpinAI, including new Cloudflare and custom HTTP integrations."
 ---
 
-SpinAI supports multiple LLMs for agent decision making:
+SpinAI now supports a broader range of LLMs (Large Language Models) for enhanced agent decision-making capabilities. This document provides an overview of all supported LLMs, including the newly added Cloudflare and custom HTTP LLM integrations.
 
-- [OpenAI](/llms/openai)
-- [Anthropic](/llms/anthropic)
+## Existing LLM Integrations
 
-Each LLM can be configured with custom settings like:
+SpinAI has been supporting several LLMs, each offering unique features and capabilities:
+
+- [OpenAI](/llms/openai): Known for its GPT models, OpenAI provides versatile AI models suitable for a wide range of applications.
+- [Anthropic](/llms/anthropic): Offers Claude, a model designed for safety and reliability in AI interactions.
+
+Each LLM can be configured with custom settings, including:
 
 - Model selection
 - Temperature
 - Token limits
 - API configuration
 
+## New Integrations
+
+SpinAI is expanding its LLM support to include:
+
+- [Cloudflare](/llms/cloudflare): Leverage Cloudflare's global network to deploy and scale your LLM applications with ease.
+- [Custom HTTP LLM](/llms/http-llm): Integrate any LLM that offers an HTTP API, providing flexibility to use specialized models not directly supported.
+
+These new integrations offer additional flexibility and control, allowing users to tailor their LLM usage to specific needs and scenarios.
+
 ## Choosing an LLM
 
-Consider these factors when choosing an LLM:
+When selecting an LLM for your project, consider the following factors:
 
-- Cost per token
-- Response quality
-- API reliability
-- Token context limits
+- **Cost per token**: Evaluate the cost-effectiveness based on your usage patterns.
+- **Response quality**: Consider the model's performance and the relevance of its responses.
+- **API reliability**: Ensure the API's uptime and responsiveness meet your requirements.
+- **Token context limits**: Be aware of the maximum token limits, as they can impact the complexity of the prompts you can use.
 
 ## Next Steps
 
+Explore the setup guides for each LLM to get started:
+
 <CardGroup>
   <Card title="OpenAI Setup" icon="openai" href="/llms/openai">
-    Use OpenAI models
+    Use OpenAI models for versatile applications.
   </Card>
   <Card title="Anthropic Setup" icon="brain" href="/llms/anthropic">
-    Use Claude models
+    Use Claude models for safety-focused AI interactions.
+  </Card>
+  <Card title="Cloudflare Setup" icon="cloudflare" href="/llms/cloudflare">
+    Deploy and scale with Cloudflare's global network.
+  </Card>
+  <Card title="Custom HTTP LLM Setup" icon="custom" href="/llms/http-llm">
+    Integrate any LLM with an HTTP API for maximum flexibility.
   </Card>
 </CardGroup>
+
+This comprehensive support for multiple LLMs underscores SpinAI's commitment to providing flexible and powerful AI solutions to meet diverse needs and challenges.
