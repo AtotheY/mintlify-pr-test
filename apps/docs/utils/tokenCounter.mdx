@@ -1,0 +1,53 @@
+---
+title: Token Counter Utility
+description: Documentation for the tokenCounter utility, including updated cost estimation functionalities for various AI models.
+---
+
+## Token Counter Utility
+
+The `tokenCounter` utility is designed to help estimate the cost of processing input and output tokens for various AI models. This utility is crucial for managing and optimizing the usage of AI models, especially in scenarios where cost efficiency is a priority.
+
+### Cost Estimation
+
+The cost of processing tokens can vary significantly across different AI models. The `tokenCounter` utility provides a straightforward way to estimate these costs by defining the cost per input and output token for each supported model.
+
+Below is the updated list of AI models and their respective token processing costs:
+
+```typescript
+const MODEL_COSTS = {
+  "gpt-3.5-turbo": { input: 0.1, output: 0.2 },
+  "gpt-4": { input: 0.2, output: 0.4 },
+  "claude-2.1": { input: 8, output: 24 },
+  "claude-2.0": { input: 8, output: 24 },
+  "claude-instant-1.2": { input: 0.8, output: 2.4 },
+
+  // Cloudflare AI Models
+  "@cf/meta/llama-2-7b-chat-int8": { input: 0.2, output: 0.4 },
+  "@cf/meta/llama-2-13b-chat-int8": { input: 0.4, output: 0.8 },
+  "@cf/meta/llama-2-70b-chat-int8": { input: 1.0, output: 2.0 },
+  "@cf/mistral/mistral-7b-instruct-v0.1": { input: 0.2, output: 0.4 },
+  "@cf/tiiuae/falcon-7b-instruct": { input: 0.2, output: 0.4 },
+  "@cf/anthropic/claude-instant-1.2": { input: 0.8, output: 2.4 },
+  "@cf/anthropic/claude-2.1": { input: 8.0, output: 24.0 },
+  "custom-http-model": { input: 0.5, output: 1.5 },
+} as const;
+```
+
+### Usage
+
+To use the `tokenCounter` utility, you need to provide the model ID and the number of input and output tokens you plan to process. The utility will then calculate the estimated cost based on the predefined costs for the specified model.
+
+Example usage:
+
+```typescript
+import { calculateCost } from './tokenCounter';
+
+const modelId = "gpt-3.5-turbo";
+const inputTokens = 100;
+const outputTokens = 150;
+
+const cost = calculateCost(modelId, inputTokens, outputTokens);
+console.log(`Estimated cost for model ${modelId}: $${cost}`);
+```
+
+This utility is an essential tool for developers and businesses that rely on AI models for generating content, answering queries, or any other task that involves processing large amounts of data. By accurately estimating costs, users can make informed decisions about which models to use and how to optimize their token usage for cost efficiency.
