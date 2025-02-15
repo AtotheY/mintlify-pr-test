@@ -6,7 +6,6 @@ export interface CloudflareConfig {
   accountId: string;
   model?: string;
 }
-
 export function createCloudflareAILLM(config: CloudflareConfig): LLM {
   if (!config.apiToken) {
     throw new Error(
