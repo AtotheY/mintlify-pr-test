@@ -1,91 +1,79 @@
 ---
 title: "Integrating Cloudflare with SpinAI"
-description: "Learn how to implement and utilize the Cloudflare LLM integration with SpinAI for enhanced AI capabilities."
+description: "Learn how to configure and use Cloudflare's LLM with SpinAI for enhanced AI capabilities."
 ---
 
 ## Introduction
 
-SpinAI introduces integration with Cloudflare's Large Language Models (LLMs), allowing developers to leverage Cloudflare's powerful AI capabilities directly within their applications. This document guides you through setting up and configuring the Cloudflare LLM integration, calculating token costs, and provides examples and best practices for its use.
+Integrating Cloudflare's Large Language Models (LLM) with SpinAI allows developers to leverage Cloudflare's AI capabilities within their applications. This documentation covers the steps required to configure and use Cloudflare LLM with SpinAI, including setting up the necessary credentials, initializing the LLM, and estimating costs.
 
-## Setup and Configuration
+## Configuration
 
-To get started with the Cloudflare LLM integration, you need to configure your environment with the necessary credentials and settings. The integration requires an API token and an Account ID from Cloudflare. Optionally, you can specify a model to use; otherwise, a default model is provided.
-
-```typescript
-import { createCloudflareAILLM } from "spinai";
-
-const llm = createCloudflareAILLM({
-  apiToken: process.env.CLOUDFLARE_API_TOKEN,
-  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
-  model: "@cf/meta/llama-2-7b-chat-int8", // Optional
-});
-```
-
-### Configuration Options
+Before you can use Cloudflare's LLM with SpinAI, you need to configure it with your Cloudflare API token and account ID. Optionally, you can specify a model; if not provided, a default model is used.
 
 ```typescript
 interface CloudflareConfig {
   apiToken: string;
   accountId: string;
-  model?: string; // Defaults to "@cf/meta/llama-2-7b-chat-int8"
+  model?: string; // Optional, defaults to "@cf/meta/llama-2-7b-chat-int8"
 }
 ```
 
-Ensure that you have the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` set in your environment variables. The model is optional and, if not specified, will default to Cloudflare's recommended model.
+Ensure you have the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` set in your environment variables or passed directly to the configuration.
 
-## Token Cost Calculation
-
-Cloudflare AI does not provide direct token counts for requests and responses. Instead, the integration estimates token usage based on character count, which is then used to calculate the cost of each request. This estimation is crucial for managing and optimizing your usage of Cloudflare's AI services.
-
-### Token Cost Calculation Example
-
-```typescript
-const input = "What is the weather like today?";
-const output = "The weather is sunny with a slight chance of rain in the afternoon.";
-
-const estimatedInputTokens = Math.ceil(input.length / 4);
-const estimatedOutputTokens = Math.ceil(output.length / 4);
-
-console.log(`Estimated Input Tokens: ${estimatedInputTokens}`);
-console.log(`Estimated Output Tokens: ${estimatedOutputTokens}`);
-```
-
-## Examples
+## Usage Examples
 
 ### Basic Cloudflare LLM Setup
 
-This example demonstrates how to set up a basic Cloudflare LLM integration and make a completion request.
+This example demonstrates how to create a Cloudflare LLM instance and use it with SpinAI. The default model and other optional parameters are used if not specified.
 
 ```typescript
-import { createCloudflareAILLM } from "spinai";
+import { createAgent } from "spinai";
+import { createCloudflareAILLM } from "spinai/src/llms/cloudflare";
 
-const llm = createCloudflareAILLM({
+const cloudflareConfig = {
   apiToken: process.env.CLOUDFLARE_API_TOKEN,
   accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+};
+
+const llm = createCloudflareAILLM(cloudflareConfig);
+
+const agent = createAgent({
+  instructions: "Provide an overview of Cloudflare's LLM capabilities",
+  actions: [], // Define your actions here
+  llm,
 });
-
-async function getCompletion(prompt: string) {
-  const completion = await llm.complete({
-    prompt: prompt,
-    maxTokens: 1024,
-  });
-
-  console.log(completion.content);
-}
-
-getCompletion("Describe the significance of AI in modern technology.");
 ```
 
-## Best Practices
+### Advanced Configuration Options
 
-- **Securely Store Credentials**: Ensure your Cloudflare API token and Account ID are stored securely and are not hard-coded in your application.
-- **Monitor Usage**: Keep an eye on your token usage to avoid unexpected charges, especially if you're making a large number of requests or using complex prompts.
-- **Error Handling**: Implement robust error handling to manage and respond to any issues that arise during API calls, such as rate limits or service outages.
+You can specify a different model and adjust parameters like temperature and max tokens for the completion request.
 
-## Troubleshooting
+```typescript
+const cloudflareConfig = {
+  apiToken: process.env.CLOUDFLARE_API_TOKEN,
+  accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+  model: "@cf/custom-model", // Custom model identifier
+};
 
-- **Authentication Errors**: Double-check your API token and Account ID if you encounter authentication issues.
-- **Response Errors**: If you receive unexpected responses or errors, verify the structure of your prompts and the configuration of your LLM instance.
-- **Cost Management**: If your token usage is higher than expected, review your prompts and responses for efficiency and adjust the `maxTokens` parameter as needed.
+const llm = createCloudflareAILLM(cloudflareConfig);
 
-For further assistance, refer to the Cloudflare AI documentation or contact Cloudflare support.
+// Use the llm in your agent as shown in the basic setup example
+```
+
+## Cost Estimation
+
+Cloudflare AI doesn't provide token counts directly, so the cost is estimated based on character count. The estimation divides the number of characters by 4 to approximate the number of tokens used. This is important for managing and anticipating usage costs.
+
+```typescript
+// Estimated tokens calculation example
+const inputChars = 100; // Number of characters in the input
+const outputChars = 250; // Number of characters in the AI's response
+
+const estimatedInputTokens = Math.ceil(inputChars / 4);
+const estimatedOutputTokens = Math.ceil(outputChars / 4);
+
+// Use these estimates to calculate costs or manage usage
+```
+
+Remember to monitor your usage and adjust your configurations as needed to optimize costs and performance.
