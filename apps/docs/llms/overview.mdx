@@ -28,27 +28,11 @@ Consider these factors when choosing an LLM:
 
 ## Cloudflare Integration
 
-SpinAI now includes support for Cloudflare's LLM, offering a direct integration with Cloudflare's AI platform. This allows for leveraging Cloudflare's efficient and scalable infrastructure for LLM tasks.
-
-To use Cloudflare LLM, you need:
-
-- A Cloudflare account
-- An API token with AI access
-- The account ID where the LLM will be deployed
-
-Cloudflare LLMs can be particularly cost-effective and offer a unique set of models, including the latest LLaMA variants.
+SpinAI now includes support for Cloudflare's LLM, offering a robust and scalable solution for your AI needs. Cloudflare's LLM can be easily integrated with your SpinAI projects, providing high-quality responses and reliable performance.
 
 ## Custom HTTP LLM Integration
 
-For maximum flexibility, SpinAI also supports custom HTTP LLM integrations. This allows you to connect any LLM that offers an HTTP API, providing a way to use proprietary or niche models not directly supported by SpinAI.
-
-To integrate a custom HTTP LLM, you need:
-
-- The endpoint URL for the LLM API
-- Optionally, an API key if the endpoint requires authentication
-- Custom request and response transformation functions, if the API's request/response format does not match SpinAI's default
-
-This feature is designed for advanced users who need to integrate specialized language models or require complete control over their LLM infrastructure.
+For those requiring a more tailored solution, SpinAI also supports integration with custom HTTP-based LLMs. This allows you to leverage your own or third-party language models, providing the flexibility to meet specific project requirements.
 
 ## Next Steps
 
@@ -63,8 +47,10 @@ This feature is designed for advanced users who need to integrate specialized la
     Use Cloudflare models
   </Card>
   <Card title="Custom HTTP LLM Setup" icon="custom" href="/llms/http-llm">
-    Integrate with any HTTP LLM
+    Configure your custom HTTP LLM
   </Card>
 </CardGroup>
 
-SpinAI's support for a wide range of LLMs, including Cloudflare and custom HTTP integrations, ensures that you can select the best language model for your needs, balancing cost, performance, and ease of use.
+Related Documentation:
+- [Cloudflare LLM Setup](/llms/cloudflare)
+- [Custom HTTP LLM Setup](/llms/http-llm)
