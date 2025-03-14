@@ -37,6 +37,17 @@ Visit our [documentation](https://docs.spinai.dev) for:
 - Join our [Discord](https://discord.gg/BYsRx36qR3) for help and discussions
 - Star us on [GitHub](https://github.com/Fallomai/spinai)
 
+## Configuration
+
+The following environment variables can be used:
+
+- `SPINAI_API_KEY` - Your SpinAI API key
+- `MODEL_TYPE` - Type of model to use (default: TODO)
+- `MAX_TOKENS` - Maximum tokens per request (default: TODO)
+- `TEMPERATURE` - Model temperature setting (needs documentation)
+
+For detailed configuration options, see our docs at TODO.
+
 ## License
 
 MIT © [FallomAI](https://github.com/Fallomai)
